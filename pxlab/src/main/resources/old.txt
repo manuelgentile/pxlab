@@ -1,0 +1,13 @@
+TextParagraph:B() {
+				Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
+				LocationX = 0;
+				LocationY =  -200;
+				Color = yellow();
+				ReferencePoint = de.pxlab.pxl.PositionReferenceCodes.TOP_CENTER;
+				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
+				Text = categoria2;
+				Timer = de.pxlab.pxl.TimerCodes.NO_TIMER;
+				
+				FontFamily="Arial";
+				FontSize= 30;
+			}

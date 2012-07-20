@@ -1,0 +1,26 @@
+SAM.java or PictureMatrix might want to have a screen button
+
+All Display objects which access presentationManager can't currently
+run in the DisplayEditor since the EditablePresentationPanel does not
+expose its PresentationManager to the Display object.
+
+Animated Center-Surrond brightness pattern
+
+SearchPattern is such that the pattern elements can't be selected in
+the DisplayEditor
+
+Create a display which does not show anything but requires a certain 
+sequence of response events until response is finished.
+Might be a good example for the manual.
+
+
+Color Selection Display objects which are no longer suppoprted should be removed.
+
+
+McCulloghEffect does not work as advertised.
+
+Es fehlen noch:
+DIN Farbtafel
+Dichoptic mixing patterns
+Whittle's contrast colors
+

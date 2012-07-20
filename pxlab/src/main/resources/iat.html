@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<title>PXLab Demonstration Experiment</title>
+<script>
+  function showData(s) {
+     ergWin = window.open()
+     ergWin.document.write(s)
+  }
+</script>
+</head>
+<body BGCOLOR="#F0F0F0">
+	<font face="Verdana, Arial, Helvetica"/>
+	<h2 align=center>Choice Response Time</h2>
+	<p>This shows a left or right arrow and expects a left or right cursor key response.</p> 
+	<p>
+		<div align="CENTER">
+		<applet
+		  codebase="."
+		  code="ExRunButton.class"
+		  archive="exrunbutton.jar, pxlabrt.jar"
+		  alt="Start design file mio.pxd"
+		  width=800
+		  height=60
+		  mayscript=true>
+		  <param name="CommandLine" value="-S2">
+		  <param name="DesignFile" value="iat_manuel.pxd">
+		  <param name="StartButtonLabel" value="Start Choice Response Time">
+		</applet>
+		</div>
+	</p>
+</body>
+</html>

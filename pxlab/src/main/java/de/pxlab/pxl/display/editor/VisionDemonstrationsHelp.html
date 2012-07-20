@@ -1,0 +1,181 @@
+<html>
+<head>
+<title>PXLab Vision Demonstrations Help</TITLE>
+<meta NAME="date" CONTENT="02/26/2003">
+</head>
+<body>
+<font face="Verdana,Arial,Helvetica">
+
+<h2>PXLab Vision Demonstrations Help</h2>
+
+The main frame shows two subpanels: The right panel always contains a
+demo display while the left panel contains a color, geometry or timing
+control panel. Switching between these control panels is done by
+pressing the respective button in the tool bar immediately below the
+main menu bar. Demonstrations are selected from the main menu bar's
+Select menu.
+
+
+<h3>The Color Control Panel</h3>
+
+<p>The color control panel is used to adjust the <b>currently active
+color parameter</b>. The currently active color parameter may be set
+by two different methods:<br>(1) by selecting any of the object areas
+such that the color parameter defining this area's color will become
+the currently active color parameter, or<br>(2) by selecting the
+respective color at the bottom of the color control panel which shows
+the colors of all adjustable color parameters of the current demo
+display.
+
+<p>Colors are adjusted by pointing into a chromaticity chart or by
+adjusting color coordinate sliders. <b>Coordinates may only be set
+such that the resulting color is actually displayable on the current display
+device.</b>
+
+<h4>The Chromaticity Charts</h4>
+
+<p>The color control panel can show any of the following color systems:
+
+<ul> <li>CIE 1931 xy-chromaticity chart with luminance,
+
+<li>CIE 1976 L*a*b*-color space, 
+
+<li>CIE 1976 L*u*v*-color space,
+
+<li>CIE 1997 Color Appearance Model (CIECAM97s),
+
+<li>The Boynton & MacLeod relative cone excitation space with
+luminance, 
+
+<li>CIE 1931 XYZ-sliders, 
+
+<li>linear RGB relative luminance sliders,
+
+<li>device RGB values.  </ul>
+
+<p>Selection between these color systems is done by pressing the
+respective button on top of the color control panel.
+
+<p>Chromaticity charts are shown in a 2D-chart with a separate
+luminance control slider. Each chart also contains a marked region
+indicating those chromaticity values which are displayable by the
+current output device at the currently defined luminance
+level. The currently active color may be adjusted by pressing the left
+mouse button and moving the cursor within the valid color
+region. Depending on the state of the <em>Follow invalid colors</em> flag it
+is also possible to move outside the currently valid color region as
+long as the target chromaticity can be displayed at a lower luminance
+level. 
+
+<p>3D-values are shown as 3 sliders. Note that the XYZ-sliders are
+hard to use since only displayable colors may be set and the slider
+version of the color control panel does not have a visible rangle
+control.
+
+<h4>Numerical Coordinates</h4>
+
+<p>Numerical values for any of the above listed color systems may be
+shown in the bottom region of the color control panel. 
+It also is possible to directly enter numerical values into the
+respective text entry fields.  
+
+<p>To add/remove a numerical color coordinates field to the color control
+panel open the <em>Options</em> menu on the main menu bar, select the
+options subgroup <em>Color</em> and open the submenu <em>Numerical
+coordinates fields</em>. Add or remove a coordinate system by
+activating or clearing the respective flag.
+
+<h4>The Color Board</h4>
+
+The system maintains a color board where color values may be stored
+for later use. The content of the color board is shown below the
+numerical coordinates fields and above the series of current color
+parameters.
+
+<p>To push a color onto the color board press the right mouse button
+within the demo display area and then select <em>Copy to color board</em>
+from the popup menu. This copies the color of the currently active
+color parameter to the color board.
+
+<p>To set the currently active color parameter to the last color of
+the color board use the <em>Paste from color board</em> entry of the display
+area's popup menu. This also removes the color from the color board.
+
+<p>To set the currently active color parameter to any color contained
+in the color board simply press the left mouse button on top of the
+respective field of the color board. This does not remove the color
+from the color board.
+
+<p>To enable/disable showing the colors currently contained in the
+color board within the color chart open the <em>Options</em> menu on the
+main menu bar, select options subgroup <em>Color</em> and modify the
+flag <em>Show color board in charts</em>.
+
+  
+
+
+<h3>The Geometry Control Panel</h3>
+
+<p>This panel shows all those parameters of a display object which
+control geometric properties. Depending on the type of parameter the
+geometry control panel provides different tools to modify parameter
+values. Numerical parameters have sliders and text value controls,
+string parameters have text control fields, and binary flags have
+switches. Parameters which are only allowed to assume a finite number
+of integer control codes have these codes listed for selection
+together with their labels.
+
+
+<h3>The Timing Control Panel</h3>
+
+<p>This panel shows all those parameters of a display object which
+control timing properties. Control tools are identicl to those of the
+geometry control panel.
+
+<p>Note, however, that most timing properties are only relevant during
+real time experimental runs and are not used in display demonstration
+mode.
+
+
+<h3>Timing Groups</h3>
+
+Display objects are made up of simpler geometric objects. These may be
+grouped together to create timing groups. A single timing group
+contains only geometric primitives which are simultanously
+visible. The number of timing groups in a display is indicated by the
+small numbered buttons in the tool bar button line. The numbered
+button series is always preceded by a single button marked
+<em>x</em>. Pressing this button results in showing all timing groups
+simultanously. Pressing any of the numbered buttons tells the display
+system to only show those elements of the display which belong to the
+respective timing group. Note that a single display element my belong
+to more than a single timing group.
+
+
+<h3>Animated Displays</h3>
+
+If a display includes animation then the <em>Animate</em>-button will
+be active. Pressing this button starts animation and pressing the same
+button again stops it.
+
+<h3>Full Screen Display</h3>
+
+The button <em>Full</em> in the button tool bar shows the display in
+full screen mode without any controls. Any mouse button press in full
+screen mode will force the display back to window mode.
+
+<h3>Gamma Parameter Computation</h3>
+
+After the test fields of the gamma parameter displays (Select: Display
+Testing: Visual Gamma Function Measurement) have been adjusted the
+system can compute gamma parameters for the current display device.
+To compute gamma parameters open the <em>Options</em> menu on the main
+menu bar, select options subgroup <em>Color</em> and activate the
+entry <em>Compute gamma parameters</em>. This oppens a dialog which
+shows the results of the computation for all three color channels. The
+results may be saved to a file or may be applied to the current coor
+device by pressing the respective button of this dialog.
+
+</font>
+</body>
+</html>

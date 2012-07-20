@@ -1,0 +1,41 @@
+<body>
+
+<p>Support for spectral distributions which are used to describe
+light and remittance spectra. 
+
+<p>The package also contains some data files containing often used
+spectra, like the Munsell Book of Colors or some standard daylight
+distributions.
+
+<p>A <class>SpectralDistribution</class> describes a spectral
+distribution of light or a spectral transmittance or remittance
+function. Usually spectral distributions are identified by their name.
+The package contains a data base of known spectra including CIE
+daylight distributions and light sources and the Munsell book of
+colors. Spectral operations supported by this class include spectral
+multiplication (filtering), addition of spectra (additive mixture),
+and conversion into tristimulus coordinates using standard CIE color
+matching functions.
+
+<p>The classes SpectralLightSource and SpectralLightFilter are derived
+from SpectralDistribution. A spectral light source has a spectral
+distribution function and a luminance. The luminance is that luminance
+which would result from a perfect white reflector illuminated by this
+light source. The light source also contains experimental parameters
+for the name of the spectral distribution and the luminance
+value. Both of these implement the interface LightEmitter which
+describes objects which can have listeners to changes of spectral
+distributions. Both SpectralLightSource and SpectralLightFilter
+objects are used to build objects of class
+FilteredSpectralLight. Every object of this class has a light source
+and possibly multiple layers of SpectralLightFilters. The light
+emitted by a FilteredSpectral Light object can be used to determine
+CIE chromaticity coordinates. 
+
+<p>The package also contains classes which may be used to display
+spectral distribution charts on the screen and even modify these
+charts using the mouse. A SpectralDistributionPanel can hold multiple
+SpectralDistributionChart objects and these are able to listen to
+changes of the attached spectra and display these. 
+ 
+</BODY>

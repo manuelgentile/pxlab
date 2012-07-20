@@ -1,0 +1,138 @@
+<body>
+
+<p>Tools for running experiments both as applications or as applets.
+
+<p>The class <code>ExRun</code> creates a panel with action buttons
+for starting and stopping experiments. The panel may be added to a
+frame which controls the panel. Experiments may either be run within
+the given frame or may be run full screen. The panel created by
+<code>ExRun</code> may also be controlled by an applet.
+
+<p>The class <code>ExRunCommand</code> is a command line driven
+controller which may be used to start experiments from within batch
+files. It accepts several command line options including option -j
+which can be used to create a java source file froman experimental
+design. Such a design file may be compiled and can itself be run as an
+application.
+
+<h4>The ExRun class</h4>
+
+<p>The ExRun class exposes the following methods to the public:
+
+<ul>
+<li> <code>public ExRun(ExRunController ctrl)</code> is the constructor of the
+class.
+
+<li>    <code>public void setDisplayPanel(DisplayPanel dp)</code>,
+    <code>public void removeDisplayPanel()</code>,
+    <code>public DisplayPanel getDisplayPanel()</code>,
+    <code>public void open()</code>,
+    <code>public void close()</code> are the DisplayPanelContainer
+    implementation.
+
+<li>
+    <code>public Frame getFrame()</code>, 
+    <code>public void stopSession()</code>
+    are the DisplayPanelController implementation.
+
+<li> 
+    <code>public void setExDesign(ExDesign exd)</code> overrides the
+    respective declaration in PXLabApplicationPanel.
+
+<li> <code>public void actionPerformed(ActionEvent e)</code>
+implements the action bar's action listener.
+
+<li>
+    <code>public void experimentFinished()</code> is the
+    ExDesignThreadStarter implementation.
+
+
+</ul>
+
+
+
+
+
+
+<h4>Running an Experiment</h4>
+
+<P>To start an experiment we need an ExDesign object with a valid
+design tree. The ExDesign's RuntimeContext must be
+valid. EditableExDesign objects create a valid RuntimeContext on
+instantiation. General ExDesign objects need an explicit
+RuntimeContext validation. The ExRun application does that whenever a
+new ExDesign is set:
+<pre>
+    public void setExDesign(ExDesign exd) {
+	exDesign = exd;
+	exDesign.validateRuntimeContext();
+    }
+</pre>
+<p>An ExDesign object needs two objects to run an experimental session:
+
+<ol><li> an ExDesignProcessor for running the display lists and
+
+<li> a DataWriter to consume the data.
+</ol>
+
+<p>The ExDesign object does not execute the session, block, or trial
+display lists by itself. It simply sends the respective design nodes
+and display lists to the ExDesignProcessor which executes them. This
+makes it possible to use different kinds of ExDesignProcessors. The
+ProtocolExDesignProcessor does not show any displays but only prints a
+protocol of the design nodes. The DefaultExDesignProcessor runs
+displays on a screen. A SimulationExDesignProcessor can simulate
+subject responses. 
+
+<p>To create a DefaultExDesignProcessor we need a
+DisplayPanelContainer with a RealTimeDisplayPanel. Here is how these
+may be instantiated:
+<pre>
+   fullScreenWindow = new FullScreenDisplayPanelContainer(this);
+   fullScreenWindow.setDisplayPanel(new RealTimeDisplayPanel());
+</pre>
+Having a DisplayPanelContainer we can instantiate a
+DefaultExDesignProcessor, a DataWriter and tell the ExDesign object to
+start the experiment:
+<pre>
+   exDesign.runExperiment(this, 
+      new DefaultExDesignProcessor(fullScreenWindow, 
+      new NoDataWriter());
+</pre>
+In this case we use the NoDataWriter subclass of DataWriter. This
+DataWriter throws away all data. Other subclasses of DataWriter can
+write the data to a text file (TextFileDataWriter) or send the data
+to a given URL (URLDataWriter). The first argument to runExperiment() is
+the ExDesignThreadStarter object which started the experiment. A
+reference to this object is needed by the session running thread in
+order to signal when the session has been finished.
+
+<p>When an ExDesign object gets a runExperiment() message then it does
+not directly send any messages to the ExDesignProcessor. The ExDesign
+object first creates a new thread whose only task it is to run the
+session. The reason why it is necessary to execute the experiment in
+its own thread is this: The runExperiment() message of an ExDesign
+will usually be executed from within the event handling thread. This
+is because it will be the result of some button being
+pressed. However, most experiments will collect subject responses and
+will go into wait states to wait for these responses. Waiting is done
+by suspending the executing thread. If the running thread is the event
+handling thread and this thread is suspended then no events are
+handled and the program will never get any response event. Thus the
+ExDesign creates a thread and starts it:
+<pre>
+   ExRunThread exRunThread = new ExRunThread("ExDesignRun", threadStarter);
+   exRunThread.start();
+</pre>
+The ExRunThread class remembers the starter and has a very simple run() method:
+<pre>
+   public void run() {
+      runSession();
+      threadStarter.experimentFinished();
+   }
+</pre>
+It calls the ExDesign's runSession() method and runs the session. When
+the session is finished it sends the thread starter object a
+experimentFinished() message.
+
+</body>

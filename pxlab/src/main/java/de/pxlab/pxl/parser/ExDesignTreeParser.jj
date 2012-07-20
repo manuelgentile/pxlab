@@ -1,0 +1,2414 @@
+options {
+
+    USER_TOKEN_MANAGER = false;
+    USER_CHAR_STREAM = false;
+    JAVA_UNICODE_ESCAPE = true;
+
+}
+
+PARSER_BEGIN(ExDesignTreeParser)
+
+package de.pxlab.pxl.parser;
+
+import java.util.*;
+import java.io.*;
+import de.pxlab.util.StringExt;
+import de.pxlab.pxl.*;
+
+/**
+    @author H. Irtel
+    @version 0.11.0
+    @see de.pxlab.pxl.ExDesignNode
+*/
+
+/*
+
+  To Do:
+
+  make sure that the parser only sees ASCII input!
+
+  NOTE: LOOKAHEAD(n) means look at the next n input tokens and then
+  take the first of a series of choices which fit these n tokens.
+
+  // String name = new String( sourceFile.readLine().getBytes(), "ISO-8859-1");
+
+
+  02/27/01    introduced Context() and Procedure() nodes
+  03/05/01    introduced ParameterGroup() nodes
+  03/08/01    changed mofifier assignments
+
+  03/16/01    wrote documentation - no more undocumented changes !!!
+  03/21/01    added text line parsers for the design tree editor
+  04/01/01    new: public production ExParValue runtimeParameterValue()
+                   private production ExParValue literalArray()
+                   private production String signedLiteral()
+  05/29/01    allow empty blocks for Session() and Block()
+
+  09/26/01 moved Session/Block/Trial arguments declaration into the
+  Context() block and simplified Context() block names
+
+  11/03/01 moved grammar to JavaCC
+
+  01/16/02 allow Context(), Factors(), and AssignmentGroup()
+  declarations without a block
+
+  02/19/02 removed ':adjustable' modification of Display class name. This
+  is done at run time.
+
+  06/20/02 allow multiple procedure unit nodes.
+
+  08/15/02 major revision for easier editing of designs with multiple
+  procedure units 
+
+  11/05/02 fixed null pointer bug int parValuesDefinition().
+
+  2004/09/15 removed OCTAL_LITERAL since it prevented the use of
+  decimal integers with leading zeros.
+
+  2004/12/22 completely rewrote the grammer definition in order to
+  make it more clear and easier to understand. The expression()
+  definition is completely new and almost identical to Java's
+  expression grammar now.
+
+  2005/01/04 Store preceding comments in ExDesignNodes
+
+  2005/01/10 added BRACKET_OP to better handle brackets 
+
+  2005/02/18 the Procedure() now is a DisplayList in the same way as Session() is.
+
+  2005/09/12 allow short class constant names from packages de.pxlab, java, and javax
+
+*/
+
+public class ExDesignTreeParser {
+
+
+    /** Import node type for Display nodes. */
+    private static final int DISPLAY_NODE = 1;
+
+
+    /** Import node type for DisplayList nodes. */
+    private static final int CONTEXT_SUB_NODE = 2;
+
+
+    /** Import node type for Session nodes. */
+    private static final int SESSION_NODE = 3;
+
+
+    /** Import node type for Block nodes. */
+    private static final int BLOCK_NODE = 4;
+
+
+    /** Import node type for Block nodes. */
+    private static final int TRIAL_NODE = 5;
+
+
+    /** Stores the arrays of display list parameter names. These names
+        are collected during display list definitions and are
+        retrieved later for executing display list calls. */
+    private HashMap displayListParNames = new HashMap(10);
+
+
+    /** Enter a descriptor of display list parameter names into the table
+        of display list parameter names. 
+	@param n the name of the display list. 
+	@param a the descriptor of parameter names. */
+    private void enterDisplayListParNames(String n, String[] a) {
+	Debug.show(Debug.PARSER, n + " parameters: " + a);
+	if (a != null) {
+	    displayListParNames.put(n, a);
+	}
+    }
+
+
+    /** Enter all display list parameter name arrays of the given map into this parser's
+    map of parameter name arrays. */ 
+    private void enterDisplayListParNames(HashMap m) {
+        displayListParNames.putAll(m); 
+    }
+
+
+    /** Retrieve a descriptor of display list parameter names from the
+        table of display list parameter names.
+	@param n the name of the display list.
+	@return the descriptor of names contained in the argument list. */
+    private String[] getDisplayListParNames(String n) {
+	return (String[])displayListParNames.get(n);
+    }
+
+
+    /** Retrieve a preceding comment from a token object. The comments
+        preceding a token are stored in the specialToken field of a
+        Token object. */
+    private String getPrecedingComments(Token t) {
+	if (t.specialToken == null) return null;
+	Token tmp_t = t.specialToken;
+	while (tmp_t.specialToken != null) tmp_t = tmp_t.specialToken;
+	StringBuffer sb = new StringBuffer();
+	while (tmp_t != null) {
+	    sb.append(/* "\n" + */ tmp_t.image);
+	    tmp_t = tmp_t.next;
+	}
+	return sb.toString();
+    }
+
+
+    /** Send a semantic error note to the console. */
+    private void semanticError(Token t, String s) {
+	Syslog.out.println("Error in line " + t.beginLine + " column " + t.beginColumn + ": " + s);
+    }
+}
+
+
+PARSER_END(ExDesignTreeParser)
+
+    /* WHITE SPACE */
+
+    SKIP : { " " | "\t" | "\n" | "\r" | "\f" }
+
+    /* COMMENTS */
+
+    MORE : {
+	"//" : IN_SINGLE_LINE_COMMENT
+	|
+	<"/**" ~["/"]> { input_stream.backup(1); } : IN_FORMAL_COMMENT
+        |
+        "/*" : IN_MULTI_LINE_COMMENT
+    }
+
+    <IN_SINGLE_LINE_COMMENT>
+	SPECIAL_TOKEN : {
+	    <SINGLE_LINE_COMMENT: "\n" | "\r" | "\r\n" > : DEFAULT
+	}
+
+    <IN_FORMAL_COMMENT>
+	SPECIAL_TOKEN : {
+            <FORMAL_COMMENT: "*/" > : DEFAULT
+        }
+
+    <IN_MULTI_LINE_COMMENT>
+	SPECIAL_TOKEN : {
+            <MULTI_LINE_COMMENT: "*/" > : DEFAULT
+        }
+
+    <IN_SINGLE_LINE_COMMENT,IN_FORMAL_COMMENT,IN_MULTI_LINE_COMMENT>
+        MORE : {
+            < ~[] >
+    }
+
+    /* RESERVED WORDS AND LITERALS */
+
+    TOKEN : {
+	< EXPERIMENT: "Experiment" >
+      | < EXPERIMENTDATA: "ExperimentData" >
+      | < PROCEDURE: "Procedure" >
+      | < PROCEDUREEND: "ProcedureEnd" >
+      | < PROCEDUREDATA: "ProcedureData" >
+      | < SESSION: "Session" >
+      | < SESSIONEND: "SessionEnd" >
+      | < SESSIONDATA: "SessionData" >
+      | < BLOCK: "Block" >
+      | < BLOCKEND: "BlockEnd" >
+      | < BLOCKDATA: "BlockData" >
+      | < TRIAL: "Trial" >
+      | < TRIALDATA: "TrialData" >
+      | < NEWPAR: "new" >
+      | < ADJUSTABLE: "adjustable" >
+      | < CONTEXT: "Context" >
+      | < ASSIGNMENTGROUP: "AssignmentGroup" >
+      | < CONTINUATIONGROUP: "ContinuationGroup" >
+      | < FACTORS: "Factors" >
+      | < RANDFACTOR: "RandomFactor" >
+      | < INDEPFACTOR: "IndependentFactor" >
+      | < DEPFACTOR: "DependentFactor" >
+      | < COVFACTOR: "CovariateFactor" >
+      | < FACTORLEVEL: "FactorLevel" >
+      | < CONDITIONTABLE: "ConditionTable" >
+      | < CONDITION: "Condition" >
+      | < IMPORT: "Import" >
+      | < TRUE: "true" >
+      | < FALSE: "false" >
+    }
+
+  /* LITERALS */
+
+  TOKEN : {
+    < INTEGER_LITERAL:
+          <DECIMAL_LITERAL> (["l","L"])?
+        | <HEX_LITERAL> (["l","L"])?
+    >
+  |
+    < #DECIMAL_LITERAL: ["0"-"9"] (["0"-"9"])* >
+  |
+    < #HEX_LITERAL: "0" ["x","X"] (["0"-"9","a"-"f","A"-"F"])+ >
+  |
+    < FLOATING_POINT_LITERAL:
+          (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])?
+        | "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])?
+        | (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])?
+        | (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"]
+    >
+  |
+    < #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+  |
+    < CHARACTER_LITERAL:
+        "'"
+        (   (~["'","\\","\n","\r"])
+          | ("\\"
+              ( ["n","t","b","r","f","\\","'","\""]
+              | ["0"-"7"] ( ["0"-"7"] )?
+              | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+              )
+            )
+        )
+        "'"
+    >
+  |
+    < STRING_LITERAL:
+        "\""
+        (   (~["\"","\\","\n","\r"])
+          | ("\\"
+              ( ["n","t","b","r","f","\\","'","\""]
+              | ["0"-"7"] ( ["0"-"7"] )?
+              | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+              )
+            )
+        )*
+        "\""
+    >
+  }
+
+  /* IDENTIFIERS */
+
+  TOKEN : {
+    < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+  |
+    < #LETTER:
+        [
+         "$",
+         "A"-"Z",
+         "_",
+         "a"-"z",
+         "\u00c0"-"\u00d6",
+         "\u00d8"-"\u00f6",
+         "\u00f8"-"\u00ff",
+         "\u0100"-"\u1fff",
+         "\u3040"-"\u318f",
+         "\u3300"-"\u337f",
+         "\u3400"-"\u3d2d",
+         "\u4e00"-"\u9fff",
+         "\uf900"-"\ufaff"
+        ]
+    >
+  |
+    < #DIGIT:
+        [
+         "0"-"9",
+         "\u0660"-"\u0669",
+         "\u06f0"-"\u06f9",
+         "\u0966"-"\u096f",
+         "\u09e6"-"\u09ef",
+         "\u0a66"-"\u0a6f",
+         "\u0ae6"-"\u0aef",
+         "\u0b66"-"\u0b6f",
+         "\u0be7"-"\u0bef",
+         "\u0c66"-"\u0c6f",
+         "\u0ce6"-"\u0cef",
+         "\u0d66"-"\u0d6f",
+         "\u0e50"-"\u0e59",
+         "\u0ed0"-"\u0ed9",
+         "\u1040"-"\u1049"
+        ]
+    >
+  }
+
+/** Main entry point for parsing an experimental design file. The
+input stream of the parser must deliver a valid experimental design.
+
+<p>An experiment starts with the keyword 'Experiment' followed
+by an argument list and a block which contains three subnodes:
+context, factors, and procedure declarations.
+
+@throws ParseException if there is a syntax error. 
+@return the ExDesignNode object of the experiment declaration. 
+@see de.pxlab.pxl.ExDesign
+@see de.pxlab.pxl.ExDesignNode
+
+*/
+
+ExDesignNode experimentDeclaration() :
+{
+    Token t;
+    ExDesignNode experiment = null;
+    ExDesignNode factors = null;
+    ExDesignNode context = null;
+    ExDesignNode procedure = null;
+    String[] parNames = null;
+}
+{
+        {
+	    Debug.show(Debug.PARSER, "\nStarting parser with experimentDeclaration()");
+        }
+    t = <EXPERIMENT> 
+	{
+	    experiment = new ExDesignNode(ExDesignNode.ExperimentNode, 3);
+	    experiment.setTokenPosition(t.beginLine, t.beginColumn);
+	    if (t.specialToken != null) experiment.setComment(getPrecedingComments(t));
+	}
+    parNames = parameterIdentifierList()
+	{ 
+	    enterDisplayListParNames("Experiment", parNames);
+	    experiment.setParNames(parNames);
+	    if (parNames != null) {
+		ExParValue[] values = new ExParValue[parNames.length];
+		for (int i = 0; i < parNames.length; i++) {
+		    values[i] = new ExParValueUndefined();
+		}
+		experiment.setParValues(values);
+	    }
+	    Debug.show(Debug.PARSER, "Starting node " + experiment);
+	}
+    "{" context = contextDeclaration()
+	{
+	    experiment.add(context); 
+	}
+    ( 
+        factors = factorsDeclaration()
+	{
+	    experiment.add(factors); 
+	}
+    )?
+    ( 
+        procedure = procedureDeclaration()
+	{
+	    experiment.add(procedure); 
+	}
+    )?
+    "}" <EOF>
+	{
+	    Debug.show(Debug.PARSER, "Finished node " + experiment);
+	    return(experiment);
+	}
+}
+
+
+    /** Defines the global parameter context and all experimental
+	stimuli.  An experimental context starts with the keyword
+	'Context' followed by a list of runtime arguments and
+	a block which contains global assignment groups and display list
+	definition subnodes.  
+
+	@throws ParseException if there is a syntax error.
+	@return the node of the context declaration.  */
+ExDesignNode contextDeclaration() :
+{
+    Token t;
+    ExDesignNode context = null;
+    ExDesignNode a = null;
+    String[] parNames = null;
+    ArrayList aList = null;
+}
+{
+    t = <CONTEXT>
+	{ 
+	    context = new ExDesignNode(ExDesignNode.ContextNode, 10);
+	    context.setTokenPosition(t.beginLine, t.beginColumn);
+	    if (t.specialToken != null) context.setComment(getPrecedingComments(t));
+	    Debug.show(Debug.PARSER, "Begin node: " + context);
+	}
+    parNames = parameterIdentifierList()
+	{
+	    context.setParNames(parNames);
+	    Debug.show(Debug.PARSER, "Starting node " + context);
+	}
+    "{" 
+    ( 
+        ( a = displayListDeclaration()
+	  | a = assignmentGroupDeclaration() 
+        )
+            {
+		context.add(a);
+	    }
+	| ( aList = importedExDesignNodeDeclarationList(CONTEXT_SUB_NODE) 
+            {
+                for (int i = 0; i < aList.size(); i++)
+		    context.add((ExDesignNode)aList.get(i));	
+	    }
+        )
+    )* 
+    "}" 
+	{
+	    Debug.show(Debug.PARSER, "Finished node " + context);
+	    return context;
+	}
+}
+
+
+    /** A display list declaration. 
+
+    <p>The declaration starts
+	with a display list identifier followed by a list of runtime
+	parameter names. The block of the display list declaration contains
+	the sequence of displays contained in this display list.
+	<p>The declaration may contain an instance modifier appended
+	to the display list type name. The instance name becomes the
+	display list name.
+	@throws ParseException if there is a syntax error. 
+	@return the node of the display list declaration. */
+ExDesignNode displayListDeclaration() :
+{
+    DisplayListIdentifier t = null;
+    String nd = null;
+    int type = 0;
+    ExDesignNode dList = null;
+    ExDesignNode dsp = null;
+    String[] parNames = null;
+    ArrayList dspList = null;
+}
+{
+    t = displayListIdentifier()
+	{
+	    nd = t.toString();
+	    int id = t.getNodeType(true);
+	    if (id >= 0) {
+		type = id;
+	    } else {
+		throw new ParseException();
+	    }
+	    dList = new ExDesignNode(type, 1);
+	    dList.setName(nd);
+	    dList.setTokenPosition(t.beginLine, t.beginColumn);
+	    dList.setComment(t.getComment());
+	    Debug.show(Debug.PARSER, "Begin node: " + dList);
+	}
+    parNames = displayListParameterIdentifierList(nd)
+	{
+	    enterDisplayListParNames(nd, parNames);
+	    dList.setParNames(parNames);
+	    Debug.show(Debug.PARSER, "Starting node " + dList);
+	}
+    ( 
+        ( "{" 
+	  ( ( dsp  = displayDeclaration() 
+	        {
+		    if (dsp != null) {
+			if (dList.isDataDisplayList()) {
+			    dsp.setType(ExDesignNode.DataDisplayNode);
+			}
+			dList.add(dsp);
+		    }
+		}
+            ) | ( dspList = importedExDesignNodeDeclarationList(DISPLAY_NODE) 
+	        {
+		    if (dspList.size() > 0) {
+                        for (int i = 0; i < dspList.size(); i++) { 
+                            dsp = (ExDesignNode)dspList.get(i);
+			    if (dList.isDataDisplayList()) {
+		                dsp.setType(ExDesignNode.DataDisplayNode);
+                            }
+                            dList.add(dsp);
+			}
+		    }
+		}
+                )
+	    )*
+	"}" ) 
+        | ";" 
+    )
+	{
+	    Debug.show(Debug.PARSER, "Finished node " + dList);
+	    return(dList);
+	}
+}
+
+
+ArrayList importedExDesignNodeDeclarationList(int type) :
+{
+    Token dt;
+    Token ft;
+    ArrayList nodeList = new ArrayList(10);
+}
+{
+    <IMPORT> "(" dt = <STRING_LITERAL> "," ft = <STRING_LITERAL> ")" ";" 
+	{ 
+	    String dir = StringExt.unquoteHTML(dt.toString());
+	    String fn = StringExt.unquoteHTML(ft.toString());
+	    String fs = FileBase.loadString(dir, fn);
+	    if (StringExt.nonEmpty(fs)) {
+		byte[] buf = fs.getBytes();
+		InputStream ins = new ByteArrayInputStream(buf);
+		ExDesignTreeParser pp = new ExDesignTreeParser(ins, Base.getEncoding());
+		Debug.show(Debug.FILES, "ExDesignTreeParser.importedDisplayDeclaration(): Read design file " + fn);
+		Debug.show(Debug.PARSER, "ExDesignTreeParser.importedDisplayDeclaration(): Parse file " + fn + " ...");
+		try {
+		    if (type == DISPLAY_NODE) {
+			nodeList = pp.importedDisplayDeclarationList();
+		    } else if (type == CONTEXT_SUB_NODE) {
+			nodeList = pp.importedContextSubnodeDeclarationList();
+                        enterDisplayListParNames(pp.displayListParNames);
+		    } else if (type == TRIAL_NODE) {
+                        pp.enterDisplayListParNames(displayListParNames);
+			nodeList = pp.importedTrialList();
+		    } else if (type == BLOCK_NODE) {
+                        pp.enterDisplayListParNames(displayListParNames);
+			nodeList = pp.importedBlockList();
+		    } else if (type == SESSION_NODE) {
+                        pp.enterDisplayListParNames(displayListParNames);
+			nodeList = pp.importedSessionList();
+		    }
+		} catch (ParseException pex) {
+		    new SyntaxError(StringExt.fixedParserErrorMessage(pex, fn));
+		    // throw new IOException("Syntax error in file " + fn);
+		} catch (TokenMgrError tme) {
+		    new SyntaxError(StringExt.fixedParserErrorMessage(tme, fn));
+		    // throw new IOException("Token error in file " + fn);
+		}
+	    } else {
+		new FileError("Import file " + FileBase.createResourcePath(dir, fn) + " is missing.");
+	    }
+	    return nodeList;
+	}
+}
+
+
+/** An imported list of Display declarations. */
+ArrayList importedDisplayDeclarationList() : 
+{
+        ArrayList nodeList = new ArrayList(10);
+        ExDesignNode node = null;
+}
+{
+    ( node = displayDeclaration() 
+        {
+            nodeList.add(node);
+        }
+    )*
+        {
+            return nodeList;
+        } 
+}
+
+
+
+/** An imported list of DisplayList or AssignmentGroup declarations. */
+ArrayList importedContextSubnodeDeclarationList() : 
+{
+        ArrayList nodeList = new ArrayList(10);
+        ExDesignNode node = null;
+}
+{
+    ( ( node = displayListDeclaration() | node = assignmentGroupDeclaration() )
+        {
+            nodeList.add(node);
+        }
+    )*
+        {
+            return nodeList;
+        } 
+}
+
+
+
+/** An imported list of Session declarations. */
+ArrayList importedSessionList() : 
+{
+        ArrayList nodeList = new ArrayList(10);
+        ExDesignNode node = null;
+}
+{
+    ( node = sessionDeclaration() 
+        {
+            nodeList.add(node);
+        }
+    )*
+        {
+            return nodeList;
+        } 
+}
+
+
+
+/** An imported list of Session declarations. */
+ArrayList importedBlockList() : 
+{
+        ArrayList nodeList = new ArrayList(10);
+        ExDesignNode node = null;
+}
+{
+    ( node = blockDeclaration() 
+        {
+            nodeList.add(node);
+        }
+    )*
+        {
+            return nodeList;
+        } 
+}
+
+
+
+/** An imported list of Trial declarations. */
+ArrayList importedTrialList() : 
+{
+        ArrayList nodeList = new ArrayList(10);
+        ExDesignNode node = null;
+}
+{
+    ( node = trialDeclaration() 
+        {
+            nodeList.add(node);
+        }
+    )*
+        {
+            return nodeList;
+        } 
+}
+
+
+
+    /** Describes a display object contained in a display list. The
+	instance name of a display object is the display object's class
+	name optionally followed by an arbitray instance modifier. The
+	syntax is:
+
+	<p>display-class-name ':' instance-modifier
+
+	@throws ParseException if there is a
+	syntax error.
+	@return the node of the display component declaration. */
+ExDesignNode displayDeclaration() :
+{
+    DisplayIdentifier t = null;
+    ExDesignNode dsp = null;
+    ExDesignNode modifier = null;
+    ExDesignNode pa = null;
+    String[] parNames = null;
+}
+{
+    t = displayIdentifier()
+	{
+	    dsp = new ExDesignNode(ExDesignNode.DisplayNode, t.getClassName(), null, 1);
+	    dsp.setTokenPosition(t.beginLine, t.beginColumn);
+	    dsp.setComment(t.getComment());
+	    dsp.setName(t.toString());
+	    Debug.show(Debug.PARSER, "Starting node " + dsp);
+	}
+    parNames = displayListParameterIdentifierList(dsp.getName())
+	{
+	    dsp.setParNames(parNames);
+	}
+    ( 
+        ( "{" 
+	    ( pa = displayParameterValueAssignment(dsp)
+	        {
+		    dsp.add(pa);
+		}
+	    )* 
+        "}" ) 
+        | ";" 
+    )
+	{
+	    Debug.show(Debug.PARSER, "Finished node " + dsp);
+	    return(dsp);
+	}
+}
+
+
+    /** Collects assignments to and definitions of global experimental
+        parameters.  
+
+	<p>An assignment group starts with the keyword
+        'AssignmentGroup' followed by a list of runtime arguments. The
+        block contains assignments to global experimental parameters
+        only. Note that new global experimental parameters may be
+        created by putting the keyword 'new' in front of an
+        assignment. An experiment may contain more than a single
+        assignment group.
+  
+	@throws ParseException if there is a syntax error. 
+	@return the node of the assignment group declaration.  */
+ExDesignNode assignmentGroupDeclaration() :
+{
+    Token t;
+    ExDesignNode assignmentGrp = null;
+    ExDesignNode a = null;
+    String[] parNames = null;
+}
+{
+    t = <ASSIGNMENTGROUP> 
+	{ 
+	    assignmentGrp = new ExDesignNode(ExDesignNode.AssignmentGroupNode, 10);
+	    assignmentGrp.setTokenPosition(t.beginLine, t.beginColumn);
+	    if (t.specialToken != null) assignmentGrp.setComment(getPrecedingComments(t));
+	    Debug.show(Debug.PARSER, "Begin node: " + assignmentGrp);
+	}
+    parNames = parameterIdentifierList()
+	{
+	    assignmentGrp.setParNames(parNames);
+	}
+    ( 
+        ( "{" 
+	    ( a = globalParameterValueAssignment()
+	        {
+		    assignmentGrp.add(a);
+		}
+	    )* 
+        "}" ) 
+        | ";" 
+    )
+	{
+	    Debug.show(Debug.PARSER, "Finished node " + assignmentGrp);
+	    return assignmentGrp;
+	}
+}
+
+
+    /** An assignments to a global experimental
+        parameter or the definition of a new global experimental parameter.  
+
+	<p>New global experimental parameters may be
+        created by putting the keyword 'new' in front of the
+        assignment.
+  
+	@throws ParseException if there is a syntax error. 
+	@return the node of the assignment declaration.  */
+ExDesignNode globalParameterValueAssignment() :
+{
+    Token t;
+    int nodeType = ExDesignNode.AssignmentNode;
+    ExDesignNode node = null;
+    String comment = null;
+}
+{
+    ( 
+        t = <NEWPAR> 
+            { 
+		nodeType = ExDesignNode.NewParamAssignmentNode;
+		if (t.specialToken != null) comment = getPrecedingComments(t);
+	    }
+    )?
+
+	node = parameterValueAssignment(null, nodeType)
+            {
+		if (comment != null) node.setComment(comment);
+		return node;
+	    }
+}
+
+
+    /** An assignments to an experimental
+        parameter of a display object.
+
+	<p>An experimental parameter may be defined as an adjustable
+        parameter putting the keyword 'adjustable' in front of the
+        assignment.
+  
+	@throws ParseException if there is a syntax error. 
+	@return the node of the assignment declaration.  */
+ExDesignNode displayParameterValueAssignment(ExDesignNode dsp) :
+{
+    Token t;
+    int nodeType = ExDesignNode.AssignmentNode;
+    ExDesignNode node = null;
+    String comment = null;
+}
+{
+    ( 
+	t = <ADJUSTABLE> 
+            { 
+		nodeType = ExDesignNode.AdjustableParamAssignmentNode;
+		if (t.specialToken != null) comment = getPrecedingComments(t);
+	    }
+    )?
+	node = parameterValueAssignment(dsp, nodeType)
+            {
+		if (comment != null) node.setComment(comment);
+		return node;
+	    }
+}
+
+
+    /** A single assignment node which assigns a value to an
+	experimental parameter. Assignments may be prefixed by the
+	keyword 'new' in order to create a global experimental
+	parameter.
+
+	<p>External calls:
+	<br>EditableExDesign.changeNodeValue()
+
+	@throws ParseException if there is a syntax error. 
+	@param dsp the name of the display which is the parent
+	node of this assignment. If this is null then the assumption
+	is that the parameter involved is a global experimental
+	parameter.
+	@return the node of the assignment group declaration. */
+ExDesignNode parameterValueAssignment(ExDesignNode dsp, int nodeType) :
+{
+    Token t, mt;
+    ExParValue x;
+    ExDesignNode node = null;
+    String m = null;
+    String name = null;
+    String comment = null;
+}
+{
+    t = <IDENTIFIER> 
+	{
+	    name = t.toString();
+	    if (t.specialToken != null) comment = getPrecedingComments(t);
+	}
+    ( 
+        "." mt = <IDENTIFIER>
+	    {
+		name = name + "." + mt.toString();
+	    }
+    )* 
+    "=" x = assignableParameterValue() 
+	{
+	    node = new ExDesignNode(nodeType, name, x, 0);
+	    node.setTokenPosition(t.beginLine, t.beginColumn);
+	    node.setName(name);
+	    node.setTypeModifier(ExDesignNode.ExplicitAssignment);
+	    if (comment != null) node.setComment(comment);
+	}
+    ";"
+	{
+	    Debug.show(Debug.PARSER, "Assignment: " + node);
+	    return node;
+	}
+}
+
+
+
+    /** Defines the factorial structure of the experiment including
+        the operationalization of each experimental factor. An
+        experimental factors declaration starts with the keyword
+        'Factors' followed by an argument list and a block containing
+        a list of factor declarations or a condition table
+        declaration.
+
+	@throws ParseException if there is a syntax error.
+	@return the node of the factors declaration. */
+ExDesignNode factorsDeclaration() :
+{
+    Token t;
+    ExDesignNode factors = null;
+    ExDesignNode node = null;
+    String[] parNames = null;
+}
+{
+    t = <FACTORS>
+	{ 
+	    factors = new ExDesignNode(ExDesignNode.FactorsNode, 10);
+	    factors.setTokenPosition(t.beginLine, t.beginColumn);
+	    if (t.specialToken != null) factors.setComment(getPrecedingComments(t));
+	    Debug.show(Debug.PARSER, "Begin node: " + factors);
+	}
+    parNames = parameterIdentifierList()
+	{
+	    factors.setParNames(parNames);
+	}
+
+    ( "{" 
+	( node = factorDeclaration() 
+	    {
+		factors.add(node);
+	    }
+	)* 
+    "}" )
+	{
+	    Debug.show(Debug.PARSER, "Finished node: " + factors);
+	    return factors;
+	}
+}
+
+
+    /** Defines a single experimental factor and its
+	operationalization. The declaration starts with a keyword
+	defining the factor type followed by a list of parameter
+	names. The first parameter defines the factor name and the
+	following parameters define the factor's operationalization.
+	We have random, independent, dependent, and covariate factors. An
+	independent factor declaration may be replaced by a condition
+	table which explicitly defines every factorial condition of
+	the experiment. This might be necessary if there is no simple
+	1-1 mapping of the factor levels to values of the
+	operationalizing experimental parameters.  The argument
+	list is followed by a block of factor level or condition
+	declarations which define every factor level or condition.
+
+	@throws ParseException if there is a syntax error.
+	@return the node of the factor declaration.*/
+ExDesignNode factorDeclaration() :
+{
+    Token t = null;
+    int type = 0;
+    ExDesignNode factor = null;
+    ExDesignNode level = null;
+    String[] parNames = null;
+}
+{
+    ( 
+        t = <RANDFACTOR> 
+	    {
+		type = ExDesignNode.RandomFactorNode;
+	    }
+	| t = <INDEPFACTOR> 
+	    {
+		type = ExDesignNode.IndependentFactorNode;
+	    }
+	| t = <DEPFACTOR> 
+	    {
+		type = ExDesignNode.DependentFactorNode;
+	    }
+	| t = <COVFACTOR> 
+	    {
+		type = ExDesignNode.CovariateFactorNode;
+	    }
+	| t = <CONDITIONTABLE> 
+	    {
+		type = ExDesignNode.ConditionTableNode;
+	    }
+    ) 
+	{
+	    factor = new ExDesignNode(type, 1);
+	    factor.setTokenPosition(t.beginLine, t.beginColumn);
+	    if (t.specialToken != null) factor.setComment(getPrecedingComments(t));
+	    Debug.show(Debug.PARSER, "Begin node: " + factor);
+	}
+    parNames = parameterIdentifierList()
+	{
+	    factor.setParNames(parNames);
+	}
+    ( 
+        ( "{"	
+	    ( level  = factorLevelDeclaration(parNames)
+	        {
+		    factor.add(level);
+		}
+	    )* 
+        "}" ) 
+        | ";" 
+    )
+	{
+	    Debug.show(Debug.PARSER, "Finished node: " + factor);
+	    return factor;
+	}
+}
+
+
+
+/** Defines parameter values which correspond to a single factor
+    level. The declaration starts with the keyword 'FactorLevel' or
+    'Condition' followed by a list of parameter values. The parameter
+    values correspond to the parameters given in the corresponding
+    factor or condition table declaration and define the parameter
+    values operationalizing the respective factor level or condition.
+
+	@throws ParseException if there is a syntax error.
+	@param parNames the array of parameter names for this node as
+	given in the argument list of the respective supernode.
+	@return the node of the factor level or condition
+	declaration. */
+
+ExDesignNode factorLevelDeclaration(String[] parNames) :
+{
+    Token t = null;
+    int nodeType = 0;
+    ExParValue[] parValues;
+    ExDesignNode node = null;
+}
+{ 
+    (
+        ( t = <FACTORLEVEL> 
+	    {
+		nodeType = ExDesignNode.FactorLevelNode;
+	    }
+	  | t = <CONDITION>
+	    {
+		nodeType = ExDesignNode.ConditionNode;
+	    }
+        )
+        parValues = assignableParameterValueList()
+	    {
+		node = new ExDesignNode(nodeType, parNames, parValues, 0);
+		node.setTokenPosition(t.beginLine, t.beginColumn);
+		if (t.specialToken != null) node.setComment(getPrecedingComments(t));
+	    }
+	";"
+    )
+	{
+	    Debug.show(Debug.PARSER, "Node: " + node);
+	    return node;
+	} 
+}
+
+
+    /** Read a comma separated list of runtime parameter names.
+	@return a String array containing the parameter names. */
+String[] parameterIdentifierList() :
+{
+    ParameterIdentifier t;
+    ArrayList parNames = new ArrayList(10);
+}
+{
+    "(" ( 
+        t = parameterIdentifier()
+	    {
+		parNames.add(t.toString());
+	    }
+        ( "," t = parameterIdentifier()
+	    {
+		parNames.add(t.toString());
+	    }
+        )*
+    )? ")"
+        {
+	    parNames.trimToSize();
+	    return StringExt.stringArrayOfList(parNames);
+	}
+}
+
+
+    /** Get a fully qualified identifier for an experimental parameter
+        of a display object. A fully qualified name contains three
+        parts: (1) the display list instance identifier, (2) the
+        display instance identifier, and (3) the experimental
+        parameter name. The three parts are separated by a period
+        character. The first two parts are missing for global
+        experimental parameters.
+        @return the fully qualified identifier. */
+ParameterIdentifier parameterIdentifier() :
+{
+    Token t = null;
+    DisplayListIdentifier n1 = null;
+    DisplayIdentifier n2 = null;
+}
+{
+    ( ( LOOKAHEAD(2) n1 = displayListIdentifier() "." n2 = displayIdentifier() "." )? t = <IDENTIFIER> )
+        {
+	    ParameterIdentifier n = new ParameterIdentifier(n1, n2, t.toString(), t.beginLine, t.beginColumn);
+	    Debug.show(Debug.PARSER, "Parameter Identifier: " + n.toString());
+	    return n;
+	}
+}
+
+
+    /** Read a comma separated list of parameter names which are used
+	as arguments for a display list. Some automatic extensions are
+	possible: If the display list identifier is missing then it is
+	inserted automatically. If both the display list and the
+	display instance prefix are missing then the name must belong
+	to a global parameter.
+	@param dln a string which contains the name of the display
+	list instance whose arguments are to be read.
+	@return the expanded parameter names in a String array. */
+String[] displayListParameterIdentifierList(String dln) :
+{
+    ParameterIdentifier t;
+    ArrayList parNames = new ArrayList(10);
+}
+{
+    "(" (
+        t = displayListParameterIdentifier(dln)
+	    {
+		parNames.add(t.toString());
+	    }
+        ( "," t = displayListParameterIdentifier(dln)
+	    {
+		parNames.add(t.toString());
+	    }
+        )*
+    )? ")"
+	{
+	    parNames.trimToSize();
+	    return StringExt.stringArrayOfList(parNames);
+	}
+}
+
+
+    /** A parameter identifier which is used
+	as an argument for a display list. Some automatic extensions are
+	possible: If the display list identifier part is missing then it is
+	inserted automatically. If both the display list and the
+	display instance prefix are missing then the name must belong
+	to a global parameter.
+	@param dlp a string which contains the name of the display
+	list instance which contains this identifier in its argument list.
+	@return the fully qualified parameter name. */
+ParameterIdentifier displayListParameterIdentifier(String dlp) :
+{
+    Token t = null;
+    DisplayIdentifier dsp = null;
+    DisplayListIdentifier dspl = null;
+    ParameterIdentifier cpi = null;
+    int line = 0, col = 0;
+}
+{
+    (( LOOKAHEAD(2) ( LOOKAHEAD(2) dspl = displayListIdentifier() "." )? dsp = displayIdentifier() "." )? t = <IDENTIFIER> )
+	{
+	    if ((dspl == null) && (dsp != null)){
+		dspl = new DisplayListIdentifier(dlp, null);
+	    }
+	    cpi = new ParameterIdentifier(dspl, dsp, t.toString(), line, col);
+	    Debug.show(Debug.PARSER, "Display List Parameter Identifier: " + cpi.toString());
+	    return cpi;
+	}
+}
+
+
+
+/** Get an identifyer for a runtime instance of a display list. The
+    runtime instance of a display list name is a display list name
+    ('ProcedureStart', 'ProcedureEnd', 'SessionStart', 'SessionEnd',
+    'BlockStart', 'BlockEnd', 'Trial') optionally followed by an
+    instance modifier with a colon as a separator character like
+    'Session:Intro'. 
+    @return the display list instance identifier. */
+DisplayListIdentifier displayListIdentifier() :
+{
+    Token t1 = null, t2 = null;
+    String n1 = null;
+    String n2 = null;
+}
+{
+    (
+        (
+	   t1 = <PROCEDURE>
+	   | t1 = <PROCEDUREEND>
+	   | t1 = <SESSION>
+	   | t1 = <SESSIONEND>
+	   | t1 = <BLOCK>
+	   | t1 = <BLOCKEND>
+	   | t1 = <TRIAL>
+	   | t1 = <EXPERIMENTDATA>
+	   | t1 = <PROCEDUREDATA>
+	   | t1 = <SESSIONDATA>
+	   | t1 = <BLOCKDATA>
+	   | t1 = <TRIALDATA>
+	)
+            {
+		n1 = t1.toString();
+	    }
+        ( ":" t2 = <IDENTIFIER> 
+	    {
+		n2 = t2.toString();
+	    }
+	)?
+    )
+	{
+	    DisplayListIdentifier n = new DisplayListIdentifier(n1, n2, t1.beginLine, t1.beginColumn);
+	    if (t1.specialToken != null) n.setComment(getPrecedingComments(t1));
+	    Debug.show(Debug.PARSER, "DisplayList identifier: " + n.toString());
+	    return n;
+	}
+}
+
+
+/** Get an identifyer for a runtime instance of a display object.  The
+    runtime name of a display object is the display's class name
+    optionally followed by an instance name using a colon as a
+    separator character, like 'Message:Intro'.
+
+    @return the procedure unit identifier. */
+DisplayIdentifier displayIdentifier() :
+{
+    Token t = null;
+    String n1 = null;
+    String n2 = null;
+}
+{
+    (
+        t = <IDENTIFIER>
+            {
+		n1 = t.toString();
+	    }
+        ( ":" t = <IDENTIFIER> 
+	    {
+		n2 = t.toString();
+	    }
+        )?
+    )
+	{
+	    DisplayIdentifier n = new DisplayIdentifier(n1, n2, t.beginLine, t.beginColumn);
+	    if (t.specialToken != null) n.setComment(getPrecedingComments(t));
+	    Debug.show(Debug.PARSER, "Display identifier: " + n.toString());
+	    return n;
+	}
+}
+
+
+/** Define the runtime argument values of a procedure. */
+ExDesignNode procedureDeclaration() :
+{
+    DisplayListIdentifier t;
+    ExParValue[] parValues;
+    ExDesignNode procedure = null;
+    ExDesignNode session = null;
+    Token t1 = null;
+    ArrayList sessionList = null;
+}
+{
+    t1 = <PROCEDURE> 
+	{
+	    t = new DisplayListIdentifier(t1.toString(), null, t1.beginLine, t1.beginColumn);
+	    if (t1.specialToken != null) t.setComment(getPrecedingComments(t1));
+	    Debug.show(Debug.PARSER, "Procedure Identifier: " + t.toString());
+	}
+    parValues = argumentParameterValueList() 
+	{
+	    String n = t.toString();
+	    int tp = t.getNodeType(false);
+	    if (tp < 0) tp = ExDesignNode.ProcedureNode;
+	    if (tp == ExDesignNode.ProcedureNode) {
+		procedure = new ExDesignNode(ExDesignNode.ProcedureNode, getDisplayListParNames(n), parValues, 10);
+		procedure.setName(n);
+		procedure.setTokenPosition(t.beginLine, t.beginColumn);
+		if (t.hasComment()) procedure.setComment(t.getComment());
+		Debug.show(Debug.PARSER, "Starting node " + procedure);
+	    } else {
+		throw new ParseException();
+	    }
+	} 
+    "{" 
+    ( 
+       ( session = sessionDeclaration() 
+	   {
+	       procedure.add(session);
+	   }
+       ) | ( sessionList = importedExDesignNodeDeclarationList(SESSION_NODE) 
+           {
+               if (sessionList.size() > 0) {
+          	   for (int i = 0; i < sessionList.size(); i++) {
+		       procedure.add((ExDesignNode)sessionList.get(i));
+		   }
+               }
+           }
+       )
+    )* 
+    "}"
+	{
+	    Debug.show(Debug.PARSER, "Finished node: " + procedure);
+	    return procedure;
+	}
+
+}
+
+
+  /** Define the runtime sequence of blocks in a session. The
+      declaration starts with the runtime instance name of the session
+      followed by a list of runtime arguments. The block contains the
+      list of experimental blocks. 
+      @return a runtime session node.  */
+ExDesignNode sessionDeclaration() :
+{
+    DisplayListIdentifier t;
+    ExParValue[] parValues;
+    ExDesignNode session;
+    ExDesignNode block = null;
+    Token t1 = null, t2 = null;
+    String n2 = null;
+    ArrayList blockList = null;
+}
+{
+    t1 = <SESSION>
+    ( ":" t2 = <IDENTIFIER> 
+	{
+	    n2 = t2.toString();
+	}
+    )?
+	{
+	    t = new DisplayListIdentifier(t1.toString(), n2, t1.beginLine, t1.beginColumn);
+	    if (t1.specialToken != null) t.setComment(getPrecedingComments(t1));
+	    Debug.show(Debug.PARSER, "Session identifier: " + t.toString());
+	}
+    parValues = argumentParameterValueList() 
+	{
+	    String n = t.toString();
+	    int tp = t.getNodeType(false);
+	    if (tp < 0) tp = ExDesignNode.SessionNode;
+	    if (tp == ExDesignNode.SessionNode) {
+		session = new ExDesignNode(ExDesignNode.SessionNode, getDisplayListParNames(n), parValues, 10);
+		session.setName(n);
+		session.setTokenPosition(t.beginLine, t.beginColumn);
+		if (t.hasComment()) session.setComment(t.getComment());
+		Debug.show(Debug.PARSER, "Begin node: " + session);
+	    } else {
+		throw new ParseException();
+	    }
+	} 
+    "{" 
+    ( 
+        ( block = blockDeclaration()  
+	    {
+		session.add(block);
+	    }
+        ) | ( blockList = importedExDesignNodeDeclarationList(BLOCK_NODE) 
+             {
+                 if (blockList.size() > 0) {
+          	    for (int i = 0; i < blockList.size(); i++) {
+		    	session.add((ExDesignNode)blockList.get(i));
+		    }
+                 }
+             }
+        )
+    )* 
+    "}"
+	{
+	    Debug.show(Debug.PARSER, "Finished node: " + session);
+	    return session;
+	}
+}
+
+
+  /** Define the runtime sequence of trials in an experimental block. The
+      declaration starts with the runtime instance name of the block
+      followed by a list of runtime arguments. The block contains the
+      list of experimental trials. 
+      @return a runtime block node.  */
+ExDesignNode blockDeclaration() :
+{
+    DisplayListIdentifier t;
+    ExParValue[] parValues;
+    ExDesignNode block;
+    ExDesignNode trial = null;
+    Token t1 = null, t2 = null;
+    String n2 = null;
+    ArrayList trialList = null;
+}
+{
+    t1 = <BLOCK>
+    ( ":" t2 = <IDENTIFIER> 
+	{
+	    n2 = t2.toString();
+	}
+    )?
+	{
+	    t = new DisplayListIdentifier(t1.toString(), n2, t1.beginLine, t1.beginColumn);
+	    if (t1.specialToken != null) t.setComment(getPrecedingComments(t1));
+	    Debug.show(Debug.PARSER, "Block identifier: " + t.toString());
+	}
+    parValues = argumentParameterValueList() 
+	{
+	    String n = t.toString();
+	    int tp = t.getNodeType(false);
+	    if (tp < 0) tp = ExDesignNode.BlockNode;
+	    if (tp == ExDesignNode.BlockNode) {
+		block = new ExDesignNode(ExDesignNode.BlockNode, getDisplayListParNames(n), parValues, 100);
+		block.setName(n);
+		block.setTokenPosition(t.beginLine, t.beginColumn);
+		if (t.hasComment()) block.setComment(t.getComment());
+		Debug.show(Debug.PARSER, "Starting node: " + block);
+	    } else {
+		throw new ParseException();
+	    }
+	} 
+    "{" 
+    ( 
+         ( trial = trialDeclaration() 
+	     {
+		 block.add(trial);
+	     }
+         ) | ( trialList = importedExDesignNodeDeclarationList(TRIAL_NODE) 
+             {
+                 if (trialList.size() > 0) {
+          	    for (int i = 0; i < trialList.size(); i++) {
+		    	block.add((ExDesignNode)trialList.get(i));
+		    }
+                 }
+             }
+         )
+    )* 
+    "}"
+	{
+	    Debug.show(Debug.PARSER, "Finished node: " + block);
+	    return block;
+	}
+}
+
+
+/** Define the runtime argument values of a trial. 
+    @return the runtime trial node. */
+ExDesignNode trialDeclaration() :
+{
+    DisplayListIdentifier t;
+    ExParValue[] parValues;
+    ExDesignNode trial;
+    Token t1 = null, t2 = null;
+    String n2 = null;
+}
+{
+    t1 = <TRIAL> 
+    ( ":" t2 = <IDENTIFIER> 
+	{
+	    n2 = t2.toString();
+	}
+    )?
+	{
+	    t = new DisplayListIdentifier(t1.toString(), n2, t1.beginLine, t1.beginColumn);
+	    if (t1.specialToken != null) t.setComment(getPrecedingComments(t1));
+	    Debug.show(Debug.PARSER, "Trial identifier: " + t.toString());
+	}
+    parValues = argumentParameterValueList() ";"
+	{
+	    String n = t.toString();
+	    int tp = t.getNodeType(false);
+	    if (tp < 0) tp = ExDesignNode.TrialNode;
+	    if (tp == ExDesignNode.TrialNode) {
+		trial = new ExDesignNode(ExDesignNode.TrialNode, getDisplayListParNames(n), parValues, 0);
+		trial.setName(n);
+		trial.setTokenPosition(t.beginLine, t.beginColumn);
+		if (t.hasComment()) trial.setComment(t.getComment());
+		Debug.show(Debug.PARSER, "Node " + trial);
+                return trial;
+	    } else {
+		throw new ParseException();
+	    }
+	} 
+}
+
+
+/** Read a comma separated list of experimental parameter values.
+    @return an array of parameter values. */
+ExParValue[] assignableParameterValueList() :
+{
+    ArrayList nl = new ArrayList(10);
+    ExParValue x;
+}
+{
+    "(" (
+        x = assignableParameterValue() 
+	{
+	    nl.add(x);
+	}
+        ( "," x = assignableParameterValue() 
+	    {
+		nl.add(x);
+	    }
+        )*
+    )? ")"
+	{
+	    ExParValue pa[] = new ExParValue[nl.size()]; 
+	    for (int i = 0; i < pa.length; i++) { 
+		pa[i] = (ExParValue)nl.get(i);
+	    }
+	    Debug.show(Debug.PARSER, "Assignable parameter value list: " + ExParValue.stringOf(pa));
+	    return pa;
+	}
+}
+
+/** Read a comma separated list of experimental parameter values.
+    @return an array of parameter values. */
+ExParValue[] argumentParameterValueList() :
+{
+    ArrayList nl = new ArrayList(10);
+    ExParValue x;
+}
+{
+    "(" (
+        x = argumentParameterValue() 
+	{
+	    nl.add(x);
+	}
+        ( "," x = argumentParameterValue() 
+	    {
+		nl.add(x);
+	    }
+        )*
+    )? ")"
+	{
+	    ExParValue pa[] = new ExParValue[nl.size()]; 
+	    for (int i = 0; i < pa.length; i++) { 
+		pa[i] = (ExParValue)nl.get(i);
+	    }
+	    Debug.show(Debug.PARSER, "Argument parameter value list: " + ExParValue.stringOf(pa));
+	    return pa;
+	}
+}
+
+/** Read a single experimental parameter value. A parameter value can
+    appear on the right side of an assignment or in an argument list
+    of a display list node in the procedure section. It may be a place
+    holder for the default parameter value, an array of constant
+    values, a replicator array, or an expression.
+
+	<p>This method is both used internally and externally.
+
+        <p>External calls:
+        <br>ExPar.loadDefaults()
+	<br>de.pxlab.pxl.design.ConditionTableModel.setValueAt()
+	@return the experimental parameter value.
+
+    */
+ExParValue assignableParameterValue() :
+{
+    ExParValue x;
+}
+{
+    (
+	x = array()
+	| x = replicator()
+	| x = expression()
+    )
+	{
+	    return(x);
+	}
+}
+
+
+ExParValue argumentParameterValue() :
+{
+    ExParValue x;
+}
+{
+    (
+        x = defaultValue()
+	| x = assignableParameterValue()
+    )
+	{
+	    return(x);
+	}
+}
+
+
+/** Read the place holder for a parameter's default value symbolized
+	 by a question mark. A parameter's default value is the value
+	 defined in its nearest enclosing scope.
+	@return an experimental parameter value marked as having its default value.  */
+ExParValue defaultValue() :
+{}
+{
+    "?" 
+	{
+	    return(new ExParValueUndefined());
+	}
+}
+
+
+/** Read an array valued experimental parameter value. Array valued
+        parameter values may only contain immediate constant
+        values. Parameter names and expressions are not allowed as
+        array elements.
+	@return the experimental parameter value.
+*/
+ExParValue array() :
+{
+    ExParValue[] sa = null;
+}
+{
+    "[" ( sa = constantValueList() )? "]"
+	{
+	    return (sa == null)? new ExParValueUndefined(): ExParValue.constantExParValue(sa);
+	}
+}
+
+/** Read a replicator array as a parameter value. A replicator array
+	 valued parameter in a trial argument list generates a series
+	 of trials which have the replicator entries as values of the
+	 respective parameter.
+	@return an experimental parameter value.  */
+ExParValue replicator() :
+{
+    ExParValue[] sa;
+}
+{
+    "<" sa = constantValueList() ">"
+	{
+	    ExParValue x = ExParValue.constantExParValue(sa);
+	    x.setExpansion();
+	    return x;
+	}
+}
+
+
+/** Read a comma separated list of parameter values which are constant
+	 and defined at compile time. These are contents of array or
+	 replicator objects.
+	@return an array containing the constnat ExParValue objects.  */
+ExParValue[] constantValueList() :
+{
+    ArrayList exlist = new ArrayList();
+    ExParValue s;
+}
+{
+    (
+        s = constantValue()
+            {
+		exlist.add(s);
+	    }
+        ( "," s = constantValue()
+            {
+		exlist.add(s);
+	    }  
+        )*
+    ) 
+	{
+	    exlist.trimToSize();
+	    int n = exlist.size();
+	    ExParValue sa[] = new ExParValue[n];
+	    for (int i = 0; i < n; i++) {
+		sa[i] = (ExParValue)(exlist.get(i));
+	    }
+	    return sa;
+	}
+}
+
+
+/** Read a constant parameter values. These are class constants
+	 addressed by their symbolic names or signed literals.
+	@return an ExParValue object containing the constant value.  */
+ExParValue constantValue() :
+{
+    ExParValue s;
+}
+{
+    ( s = valueIdentifier(true)
+    | s = signedLiteral() 
+    )
+	{
+	    return s;
+	}
+}
+
+
+/** Read a value identifier. This is a symbolic name of an
+    ExParValue. It may either be the name of a class constant or it may
+    be the instance name of an experimental parameter. 
+    @param constOnly if true then only names which represent class
+    constants are accepted. */
+ExParValue valueIdentifier(boolean constOnly) :
+{
+    Token s, t;
+    String p = null;
+    DisplayIdentifier di = null;
+    DisplayListIdentifier dli = null;
+    ExParValue x = null;
+}
+{
+    (
+      (
+        (
+          ("de.pxlab." {p="de.pxlab.";} | "java." {p="java.";} | "javax." {p="javax.";} ) 
+          (LOOKAHEAD(2) s=<IDENTIFIER> "." {p=p+s.toString()+".";} )*
+	) 
+	| (dli = displayListIdentifier() "." di = displayIdentifier() ".")
+      )? t = <IDENTIFIER>
+    )
+	{
+            if ((p != null) || ExParValue.isClassConstant(t.toString())) {
+		String n = (p != null)? (p + t.toString()): t.toString();
+		x = new ExParValueConstant(n);
+	    } else {
+		if (constOnly) {
+		    new ParameterValueError("Semantic error in line " + t.beginLine + ", column " 
+					    + t.beginColumn + ": Parameter names (" + t.toString() 
+					    + ") can't be members of arrays.");
+		    x = new ExParValue(0);
+		} else {
+		    ParameterIdentifier pn = new ParameterIdentifier(dli, di, t.toString(), t.beginLine, t.beginColumn);
+		    x = new ExParValueVar(pn.toString());
+		}
+	    }
+	    return x;
+	}
+}
+
+
+/** Read an optionally signed literal value. */
+ExParValue signedLiteral() :
+{
+    boolean negate = false;
+    ExParValue x = null;
+}
+{
+    (
+        ( 
+	    "+"
+	    | 
+	    "-" 
+	        {
+		    negate = true;
+		}
+        )? 
+	x = literal() 
+    )
+	{
+	    return negate? x.neg(): x;
+	}
+}
+
+
+/** An expression of parameter values.  
+
+<p>Expressions may not contain array values and experimental
+parameters which appear in expressions may not have array values.
+
+<p>Expressions are stored in an ExParValue as an expression tree and are
+evaluated only at runtime whenever the value of the respective
+parameter is required.
+
+    @return an experimental parameter value which contains the
+    expression.  */
+ExParValue expression() :
+{
+    ExParValue r = null, x, y, z;
+}
+{
+    (
+        x = conditionalOrExpression()
+	    {
+		r = x;
+	    } 
+        ( "?" y = expression() ":" z = expression() 
+	    {
+		r = new ExParValue(new ExParExpression(ExParExpression.CONDITIONAL_OP), x, y, z);
+	    }
+        )?
+    )  
+	{
+	    return r;
+	}
+}
+
+
+ExParValue conditionalOrExpression() :
+{
+    ExParValue x, y;
+}
+{
+    (
+        x = conditionalAndExpression() 
+        ( "||" y = conditionalAndExpression()  
+	    {
+		x = new ExParValue(new ExParExpression(ExParExpression.OR_OP), x, y, null);
+	    }
+	)*
+    )
+	{
+	    return x;
+	}
+}
+
+
+ExParValue conditionalAndExpression() :
+{
+    ExParValue x, y;
+}
+{
+    (
+        x = inclusiveOrExpression() 
+        ( "&&" y = inclusiveOrExpression()  
+	    {
+		x = new ExParValue(new ExParExpression(ExParExpression.AND_OP), x, y, null);
+	    }
+        )*
+    )
+	{
+	    return x;
+	}
+}
+
+
+ExParValue inclusiveOrExpression() :
+{
+    ExParValue x, y;
+}
+{
+    (
+        x = exclusiveOrExpression() 
+        ( "|" y = exclusiveOrExpression()  
+	    {
+		x = new ExParValue(new ExParExpression(ExParExpression.BIN_OR_OP), x, y, null);
+	    }
+        )*
+    )
+	{
+	    return x;
+	}
+}
+
+
+ExParValue exclusiveOrExpression() :
+{
+    ExParValue x, y;
+}
+{
+    (
+        x = andExpression() 
+        ( "^" y = andExpression()  
+	    {
+		x = new ExParValue(new ExParExpression(ExParExpression.BIN_XOR_OP), x, y, null);
+	    }
+        )*
+    )
+	{
+	    return x;
+	}
+}
+
+
+ExParValue andExpression() :
+{
+    ExParValue x, y;
+}
+{
+    (
+        x = equalityExpression() 
+	( "&" y = equalityExpression()  
+	    {
+		x = new ExParValue(new ExParExpression(ExParExpression.BIN_AND_OP), x, y, null);
+	    }
+        )*
+    )
+	{
+	    return x;
+	}
+}
+
+
+ExParValue equalityExpression() :
+{
+    ExParValue x, y;
+    int opCode;
+}
+{
+    (
+        x = relationalExpression() 
+        ( 
+            ( "==" 
+	        {
+		    opCode = ExParExpression.EQ_OP;
+		}
+	      | "!=" 
+	        {
+		    opCode = ExParExpression.NE_OP;
+		}
+	    ) y = relationalExpression()  
+	        {
+		    x = new ExParValue(new ExParExpression(opCode), x, y, null);
+		}
+	)*
+    )
+	{
+	    return x;
+	}
+}
+
+
+ExParValue relationalExpression() :
+{
+    ExParValue x, y;
+    int opCode;
+}
+{
+    (
+        x = shiftExpression() 
+        ( LOOKAHEAD(2) 
+            ( "<" 
+	        {
+		    opCode = ExParExpression.LT_OP;
+		}
+	      | ">" 
+		{
+		    opCode = ExParExpression.GT_OP;
+		}
+	      | "<=" 
+		{
+		    opCode = ExParExpression.LE_OP;
+		}
+	      | ">=" 
+		{
+		    opCode = ExParExpression.GE_OP;
+		}
+	    ) y = shiftExpression()  
+	        {
+		    x = new ExParValue(new ExParExpression(opCode), x, y, null);
+		}
+        )*
+    )
+	{
+	    return x;
+	}
+}
+
+
+ExParValue shiftExpression() :
+{
+    ExParValue x, y;
+    int opCode;
+}
+{
+    (
+        x = additiveExpression() 
+        ( 
+            ( "<<" 
+		{
+		    opCode = ExParExpression.SHIFT_LEFT_OP;
+		}
+	      | ">>" 
+		{
+		    opCode = ExParExpression.SHIFT_RIGHT_OP;
+		}
+	      | ">>>" 
+		{
+		    opCode = ExParExpression.SHIFT_RIGHT_UNSIGNED_OP;
+		}
+	    ) y = additiveExpression()  
+	        {
+		    x = new ExParValue(new ExParExpression(opCode), x, y, null);
+		}
+	)*
+    )
+	{
+	    return x;
+	}
+}
+
+
+ExParValue additiveExpression() :
+{
+    ExParValue x, y;
+    int opCode;
+}
+{
+    (
+        x = multiplicativeExpression() 
+        ( 
+            ( "+" 
+		{
+		    opCode = ExParExpression.ADD_OP;
+		}
+	      | "-" 
+		{
+		    opCode = ExParExpression.SUB_OP;
+		}
+	    ) y = multiplicativeExpression()  
+	        {
+		    x = new ExParValue(new ExParExpression(opCode), x, y, null);
+		}
+        )*
+    )
+	{
+	    return x;
+	}
+}
+
+
+ExParValue multiplicativeExpression() :
+{
+    ExParValue x, y;
+    int opCode;
+}
+{
+    (
+        x = unaryExpression() 
+        ( 
+	    ( "*" 
+		{
+		    opCode = ExParExpression.MUL_OP;
+		}
+	      | "/" 
+		{
+		    opCode = ExParExpression.DIV_OP;
+		}
+	      | "%" 
+		{
+		    opCode = ExParExpression.MOD_OP;
+		}
+	    ) y = unaryExpression()  
+	        {
+		    x = new ExParValue(new ExParExpression(opCode), x, y, null);
+		}
+	)*
+    )
+	{
+	    return x;
+	}
+}
+
+
+ExParValue unaryExpression() :
+{
+    ExParValue x;
+    int opCode = 0;
+}
+{
+    (
+        (
+            ( "+" 
+	        {
+		    opCode = ExParExpression.POS_OP;
+		}
+	      | "-" 
+	        {
+		    opCode = ExParExpression.NEG_OP;
+		}
+	      | "~" 
+	        {
+		    opCode = ExParExpression.BIN_COMPLEMENT_OP;
+		}
+              | "!" 
+	        {
+		    opCode = ExParExpression.NOT_OP;
+		}
+            ) x = unaryExpression()
+        )
+	    {
+		x = new ExParValue(new ExParExpression(opCode), x, null, null);
+	    }
+	| x = primaryExpression()
+    )
+	{
+	    return x;
+	}
+}
+
+
+ExParValue primaryExpression() :
+{
+    ExParValue x = null;
+    ExParValue y = null;
+    String s;
+    Token t;
+    ExParValue[] ax;
+    ParameterIdentifier pn;
+}
+{
+    (
+        x = literal()
+	| LOOKAHEAD(2) t = <IDENTIFIER> ax = assignableParameterValueList()
+	    {
+		ExParValue a = null, b = null, c = null;
+		if (ax != null) {
+		    if (ax.length >= 1) {
+			a = ax[0]; 
+		    } 
+		    if (ax.length >= 2) {
+			b = ax[1];
+		    }
+		    if (ax.length >= 3) {
+			c = ax[2];
+		    }
+		}
+		x = new ExParValue(new ExParExpression(ExParExpression.opCodeFor(t.toString())), a, b, c);
+	    }
+	| x = valueIdentifier(false)
+	| "(" y = expression() ")" 
+	    {
+		x = new ExParValue(new ExParExpression(ExParExpression.BRACKET_OP), y, null, null);
+	    }
+    )
+	{
+	    return(x);
+	}
+}
+
+
+ExParValue literal() :
+    {
+	Token t;
+	ExParValue x;
+    }
+{
+    (
+        t = <INTEGER_LITERAL>
+	    {
+		int i = 0;
+		try {
+		    i = Integer.parseInt(t.toString());
+		} catch (NumberFormatException nfx) {}
+		x = new ExParValue(i);
+	    }
+	| t = <FLOATING_POINT_LITERAL>
+	    {
+		double d = 0.0;
+		try {
+		    d = Double.valueOf(t.toString()).doubleValue();
+		} catch (NumberFormatException nfx) {}
+		x = new ExParValue(d);
+	    }
+	/*
+	| t = <CHARACTER_LITERAL>
+	    {
+		x = new ExParValue(t.toString());
+	    }
+	*/
+	| t = <STRING_LITERAL>
+	    {
+		x = new ExParValue(StringExt.unquoteHTML(t.toString()));
+	    }
+	| t = <TRUE>
+	    {
+		x = new ExParValue(1);
+	    }
+	| t = <FALSE>
+	    {
+		x = new ExParValue(0);
+	    }
+    )
+	{
+	    return x;
+	}
+}
+
+
+    /** Read a single line of input containing the definition of an
+	experimental design node including its list of arguments. The list of
+	arguments is a comma separated list of experimental parameter names.
+	<p>This method is used by the experimental design tree editor to parse
+	edited text lines.
+
+	<p>External calls:
+	<br>EditableExDesign.changeNodeValue() 
+	@return and experimental design node of the respective type
+	with arguments being defined.  */
+ExDesignNode parNamesDefinition() :
+    {
+	Token t = null;
+	int type = 0;
+	ExDesignNode node = null;
+	String[] parNames = null;
+    }
+{
+    (
+        t = <EXPERIMENT> 
+	    {
+		type = ExDesignNode.ExperimentNode;
+	    }
+	| t = <CONTEXT> 
+	    {
+		type = ExDesignNode.ContextNode;
+	    }
+	| t = <FACTORS> 
+	    {
+		type = ExDesignNode.FactorsNode;
+	    }
+	| t = <ASSIGNMENTGROUP> 
+	    {
+		type = ExDesignNode.AssignmentGroupNode;
+	    }
+	| t = <RANDFACTOR> 
+	    {
+		type = ExDesignNode.RandomFactorNode;
+	    }
+	| t = <INDEPFACTOR> 
+	    {
+		type = ExDesignNode.IndependentFactorNode;
+	    }
+	| t = <DEPFACTOR> 
+	    {
+		type = ExDesignNode.DependentFactorNode;
+	    }
+	| t = <COVFACTOR> 
+	    {
+		type = ExDesignNode.CovariateFactorNode;
+	    }
+	| t = <CONDITIONTABLE> 
+	    {
+		type = ExDesignNode.ConditionTableNode;
+	    }
+     ) 
+	parNames = parameterIdentifierList()
+	{
+	    node = new ExDesignNode(type, parNames, null, 0);
+	    node.setTokenPosition(t.beginLine, t.beginColumn);
+	    Debug.show(Debug.PARSER, "Node: " + node);
+	    return node;
+	}
+}
+
+
+    /** Read a single line of input containing the definition of an
+	experimental design node including its list of arguments. The list of
+	arguments is a comma separated list of experimental parameter names.
+	<p>This method is used by the experimental design tree editor to parse
+	edited text lines.
+
+	<p>External calls:
+	<br>EditableExDesign.changeNodeValue() 
+	@return and experimental design node of the respective type
+	with arguments being defined.  */
+ExDesignNode displayListParNamesDefinition() :
+    {
+	DisplayListIdentifier pt;
+	int type = 0;
+	ExDesignNode node = null;
+	String[] parNames = null;
+	String n = null;
+    }
+{
+    pt = displayListIdentifier()
+	{
+	    n = pt.toString();
+	    int id = pt.getNodeType(true);
+	    if (id >= 0) {
+		type = id;
+	    } else {
+		throw new ParseException();
+	    }
+	}
+    parNames = displayListParameterIdentifierList(n)
+	{
+	    node = new ExDesignNode(type, parNames, null, 0);
+	    node.setTokenPosition(pt.beginLine, pt.beginColumn);
+	    if (n != null) node.setName(n);
+	    Debug.show(Debug.PARSER, "Node: " + node);
+	    return node;
+	}
+}
+
+
+      /** Read a single line of input containing the definition of an
+	experimental design node including its list of argument values. The list of
+	argument values is a comma separated list of experimental parameter values.
+
+	This method is used by the experimental design tree editor to
+        parse edited text lines. 
+
+	<p>External calls:
+	<br>EditableExDesign.changeNodeValue()
+
+	@return and experimental design node of the respective type
+	with argument values being defined.  */
+
+ExDesignNode assignableParameterValueListDefinition() :
+{
+    Token t = null;
+    DisplayListIdentifier pt;
+    int type = 0;
+	    ExParValue[] parValues;
+	    ExDesignNode node = null;
+	    String n = null;
+} 
+{
+    (
+        t = <FACTORLEVEL> 
+	    {
+		type = ExDesignNode.FactorLevelNode;
+	    }
+	| t = <CONDITION>
+	    {
+		type = ExDesignNode.ConditionNode;
+	    }
+     )
+     parValues = assignableParameterValueList()
+	{
+	    node = new ExDesignNode(type, null, parValues, 0);
+	    node.setTokenPosition(t.beginLine, t.beginColumn);
+	    Debug.show(Debug.PARSER, "Node: " + node);
+	    return node;
+	} 
+}
+
+
+ExDesignNode argumentParameterValueListDefinition() :
+{
+    Token t = null;
+    DisplayListIdentifier pt;
+    int type = 0;
+	    ExParValue[] parValues;
+	    ExDesignNode node = null;
+	    String n = null;
+} 
+{
+    (
+	pt = displayListIdentifier()
+	    {
+		n = pt.toString();
+		int id = pt.getNodeType(false);
+		if (id >= 0) {
+		    type = id;
+		} else {
+		    throw new ParseException();
+		}
+		t = new Token();
+		t.beginLine = pt.beginLine;
+		t.beginColumn = pt.beginColumn;
+	    }
+     )
+     parValues = argumentParameterValueList()
+	{
+	    node = new ExDesignNode(type, null, parValues, 0);
+	    node.setTokenPosition(t.beginLine, t.beginColumn);
+	    node.setName(n);
+	    Debug.show(Debug.PARSER, "Node: " + node);
+	    return node;
+	} 
+}
+
+
+      /** Read a single line of input containing the definition of a
+	  display object instance name.
+
+	This method is used by the experimental design tree editor to
+        parse edited text lines. 
+
+	<p>External calls:
+	<br>EditableExDesign.changeNodeValue()
+
+	@return and experimental design node for the given display
+	instynce. */
+
+ExDesignNode displayDefinition() :
+{
+    DisplayIdentifier t = null;
+    ExDesignNode node = null;
+}
+{
+    t = displayIdentifier() "(" ")"
+	{
+	    node = new ExDesignNode(ExDesignNode.DisplayNode, t.toString(), null, 0);
+	    node.setTokenPosition(t.beginLine, t.beginColumn);
+	    Debug.show(Debug.PARSER, "Node: " + node);
+	    return node;
+	}
+}
+
+
+
+    /** Assume that the input stream of this parser is a list of
+        assignments and create a list of parameter value assignment
+        nodes. The assignment nodes become children of the node given
+        as an argument. This is used by the ExDesign class to parse
+        command line assignments.
+
+	<p>For external access only.
+	<p>External calls:
+        <pr>ExDesign.runtimeAssignmentsList() 
+	@throws ParseException if there is a syntax error.
+	@param ex the node which gets the list of assignments appended
+	as its children. */
+void createListOfAssignments(ExDesignNode ex) :
+{
+    ExDesignNode a;
+}
+{
+    ( 
+        a = parameterValueAssignment(null, ExDesignNode.AssignmentNode) 
+	    {
+		ex.add(a);
+	    }
+    )* 
+}
+
+
+/** Read an experimental parameter value which is known to be a
+literal value. Assumes that the input stream contains only a single
+literal experimental parameter value and parses it into an ExParValue
+object.
+
+    <P>Used for external access only.
+	<p>External calls:
+        <br>ExParValue.parsed() 
+	@return the experimental parameter value.
+*/
+ExParValue runtimeParameterValue() :
+{
+    ExParValue x;
+}
+{
+    ( x = signedLiteral() | x = array() )
+	{
+	    return x;
+	}
+}

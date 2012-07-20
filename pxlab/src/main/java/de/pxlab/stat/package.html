@@ -1,0 +1,50 @@
+<body>
+
+<p>Statistical support classes which are not necessarily needed by the PXLab
+experimental runtime core methods.
+
+<p>Some statistical analysis methods of this package use the class
+<class>FactorialDataTable</class> as its data. This is a table of
+factor level combinations and dependent variables.  The factorial data
+table is a <class>HashMap</class> of double values. The data values
+are the last entries of each input line with the respective factor
+level combination being the key for the <class>HashMap</class>. If a
+single factor level combination appears more than once in the input
+data then its data value becomes the arithmetic mean value over all
+replications.
+
+<p>A <class>FactorialFrequencyDataTable</class> is a subclass of the
+<class>FactorialDataTable</class> which contains frequencies as its dependent
+variables.
+
+<p>A <class>FactorialDataTable</class> may be created from a
+<class>StringDataTable</class> which actually reflects the data as they
+are collected in a PXLab experiment. A string data table is organized as
+an <class>ArrayList</class> of <class>String</class> arrays. Each
+string array contains one unit of input data usually those which have
+been created by a single trial.
+
+<p>The computational work is done by the subclasses of
+<class>StatEngine</class> which may be used from within a PXLab design
+file with the application de.pxlab.pxl.run.ExStat or from a local
+application which does some dedicated statistical analysis and does
+not expect a structured PXLab data file, but can use any data file
+organized int one line of input for every trial.
+  
+<p>This package contains the following local applications which are
+subclasses of <class>StatCommand</class> and can be used to compute
+some dedicated statistics:
+
+<dl>
+
+<dt>Anova<dd>computes an analysis of variance.
+
+<dt>PMF<dd>estimates parameters of a psychometric function.
+
+<dt>Regression<dd>computes linear multiple regression.
+
+<dt>Statistics<dd>computes lots of descriptive statistics. 
+
+</dl>
+
+</body>
