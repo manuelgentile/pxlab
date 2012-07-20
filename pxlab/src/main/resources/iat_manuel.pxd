@@ -9,7 +9,7 @@ Experiment() {
 		{
 			ExperimentName = "Brief Implicit Associations Test";
 			SubjectCode = "pxlab";
-			new aggettivi_positivi = "Felicità Gioia Amicizia Allegria";
+			new aggettivi_positivi = "Felicita' Gioia Amicizia Allegria";
 			new cittadini_settentrionali = "Milanesi Torinesi Veneziani Genovesi";
 			new cittadini_meridionali = "Napoletani Palermitani Baresi Catanzaresi";
 			new cat_cittadini_settentrionali = "SETTENTRIONALI";
@@ -37,16 +37,29 @@ Experiment() {
 		{
 			Instruction() 
 			{
-				Text = [ "In questa sezione farai un compito per valutare la tua capacità di categorizzare degli stimoli nella maniera più  VELOCE ED ACCURATA possibile:",
-				"termini %cat_aggettivi_positivi%, termini %cat_aggettivi_negativi%, abitanti di città %cat_cittadini_settentrionali% o abitanti di città %cat_cittadini_meridionali%.",
-				"Per svolgere la prova il più accuratamente possibile posiziona l'indice della mano Sinistra sul tasto E  e quello della mano Destra sul tasto I.",
-				"Dovrai premere il tasto I o il tasto E a seconda di quale termine comparirà. Le prime due prove che vedrai servono a renderti familiare il tipo di compito da svolgere.",
-				"Ricorda: il tuo compito è quello di  provare a classificare gli stimoli che riceverai il più Velocemente ed Accuratamente possibile.",
-				"Se dovessi andare troppo lentemente o fare troppi errori la prova sarà invalidata. Non preoccuparti per qualche errore occasionale. Se farai un errore apparirà una X.",
+				Text = [ "In questa sezione farai un compito per valutare la tua capacita' di categorizzare degli stimoli nella maniera piu'  VELOCE ED ACCURATA possibile:",
+				"termini '%cat_aggettivi_positivi%', termini '%cat_aggettivi_negativi%', abitanti di citta' '%cat_cittadini_settentrionali%' o abitanti di citta' '%cat_cittadini_meridionali%'.",
+				"Per svolgere la prova il piu' accuratamente possibile posiziona l'indice della mano Sinistra sul tasto ~ E ~  e quello della mano Destra sul tasto ~ I ~.",
+				"Dovrai premere il tasto I o il tasto E a seconda di quale termine comparira'. Le prime due prove che vedrai servono a renderti familiare il tipo di compito da svolgere.",
+				"Ricorda: il tuo compito e' quello di  provare a classificare gli stimoli che riceverai il piu' Velocemente ed Accuratamente possibile.",
+				"Se dovessi andare troppo lentemente o fare troppi errori la prova sara' invalidata. Non preoccuparti per qualche errore occasionale. Se farai un errore apparira' una ~ X ~.",
 				"Correggi rapidamente l'errore premendo il tasto corretto (E o I).",
 				" ",
 				"Per continuare premi la barra spaziatrice."]; 
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
+				FontFamily="Arial";
+				FontSize= 25;
+			}
+			
+			TextParagraph:cat1() 
+			{
+				Color = yellow();
+				
+				LocationY=-300;
+				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
+				Text = ["%cat_aggettivi_positivi%",
+				"%aggettivi_positivi%"];
+				Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
 				FontFamily="Arial";
 				FontSize= 30;
 			}
@@ -75,7 +88,7 @@ Experiment() {
 				Text= [
 				"Premi il tasto I ogni volta che appare un termine della categoria %cat_aggettivi_positivi% sopra indicata. Premi il tasto E  per ogni altro termine.",
 				" ",
-				"Svolgi il compito il più velocemente possibile",
+				"Svolgi il compito il piu' velocemente possibile",
 				" ",
 				"Premi la barra spaziatrice per incominciare."];
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
@@ -237,7 +250,7 @@ Experiment() {
 				Trial:T("Veneziani", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
 				Trial:T("Genovesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
 				/* Positivi */
-				Trial:T("Felicit�", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
+				Trial:T("Felicita'", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
 				Trial:T("Gioia", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
 				Trial:T("Amicizia", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
 				Trial:T("Allegria", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
@@ -262,7 +275,7 @@ Experiment() {
 				Trial:T("Veneziani", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
 				Trial:T("Genovesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
 				/* Positivi */
-				Trial:T("Felicit�", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
+				Trial:T("Felicita'", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
 				Trial:T("Gioia", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
 				Trial:T("Amicizia", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
 				Trial:T("Allegria", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
