@@ -69,6 +69,17 @@ public class TextParagraphElement extends DisplayElement {
 		colorPar = i;
 		setSize(10000, 1);
 	}
+	
+	public TextParagraphElement(int i) {
+		type = DisplayElement.TEXT;
+		colorPar = 
+			
+			
+			new ExPar(ExParTypeCodes.COLOR, new ExParValue(new ExParExpression(
+					i)), "Letter color");
+		setSize(10000, 1);
+	}
+	
 	FontMetrics fontMetrics;
 
 	public void show() {

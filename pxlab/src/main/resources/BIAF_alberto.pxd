@@ -244,7 +244,7 @@ Experiment() {
 				Timer = de.pxlab.pxl.TimerCodes.RESPONSE_TIMER;
 				ResponseSet = (Trial:AP.Feedback.CorrectCode == 0)?
 					   de.pxlab.pxl.KeyCodes.E_KEY: de.pxlab.pxl.KeyCodes.I_KEY;
-				Overlay = de.pxlab.pxl.OverlayCodes.TRANSPARENT;
+				//Overlay = de.pxlab.pxl.OverlayCodes.TRANSPARENT;
 				FontSize = 72;	
 				LocationY = 280;
 			}
@@ -258,12 +258,12 @@ Experiment() {
 		{
 			TextParagraphMultiple:A() {
 				Overlay = de.pxlab.pxl.OverlayCodes.DISPLAY_LIST;
-				LocationX = 0;
-				LocationY =  -300;
-				Color = cyan();
+				LocationX = [0,0];
+				LocationY =  [-300,-200];
+				Color = [56,57];
 				ReferencePoint = de.pxlab.pxl.PositionReferenceCodes.TOP_CENTER;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
-				Text = categoria1;
+				Text = ["xx", "rr"];
 				Timer = de.pxlab.pxl.TimerCodes.NO_TIMER;
 				
 				FontFamily="Arial";
@@ -289,7 +289,7 @@ Experiment() {
 				Timer = de.pxlab.pxl.TimerCodes.RESPONSE_TIMER;
 				ResponseSet = (Trial:T.Feedback.CorrectCode == 0)?
 				de.pxlab.pxl.KeyCodes.E_KEY: de.pxlab.pxl.KeyCodes.I_KEY;
-				Overlay = de.pxlab.pxl.OverlayCodes.TRANSPARENT;
+				//Overlay = de.pxlab.pxl.OverlayCodes.TRANSPARENT;
 				FontSize = 72;
 				LocationY = 280;
 			}
