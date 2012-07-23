@@ -86,7 +86,7 @@ Experiment() {
 			BlockStartMessage()
 			{
 				Text= [
-				"Premi il tasto I ogni volta che appare un termine della categoria %cat_aggettivi_positivi% sopra indicata. Premi il tasto E  per ogni altro termine.",
+				"Premi il tasto ~ I ~ ogni volta che appare un termine della categoria %cat_aggettivi_positivi% sopra indicata. Premi il tasto ~ E ~ per ogni altro termine.",
 				" ",
 				"Svolgi il compito il piu' velocemente possibile",
 				" ",
@@ -94,6 +94,18 @@ Experiment() {
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				FontFamily="Arial";
 				FontSize= 30;           
+			}
+			TextParagraph:cat1() 
+			{
+				Color = yellow();
+				
+				LocationY=-300;
+				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
+				Text = ["%cat_aggettivi_positivi%",
+				"%aggettivi_positivi%"];
+				Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
+				FontFamily="Arial";
+				FontSize= 30;
 			}
 		}
 				   
@@ -110,18 +122,9 @@ Experiment() {
 				"Premi la barra spaziatrice per incominciare."];
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				FontFamily="Arial";
-				FontSize= 30;
+				FontSize= 25;
 			}
-			TextParagraph:cat1() 
-			{
-				Color = yellow();
-				ReferencePoint = de.pxlab.pxl.PositionReferenceCodes.MIDDLE_LEFT;
-				
-				Text = "prova";
-				Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
-				FontFamily="Arial";
-				FontSize= 30;
-			}
+			
 			
 			
 		}
@@ -154,13 +157,14 @@ Experiment() {
 				Timer = de.pxlab.pxl.TimerCodes.NO_TIMER;
 				FontFamily="Arial";
 				FontSize= 30;
+				Overlay = de.pxlab.pxl.OverlayCodes.DISPLAY_LIST;
 			}
 			
 			
 			 
 			Message() 
 			{
-				Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
+				//Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
 				Text = item;
 				Color= yellow();
 				Timer = de.pxlab.pxl.TimerCodes.RESPONSE_TIMER;
@@ -235,6 +239,21 @@ Experiment() {
 	Procedure() {
 		Session() 
 		{
+		
+		Block:A(){}
+		Block:APP( "%cat_aggettivi_positivi%",1, 0)
+            {
+                /* Positivi */
+                Trial:AP("Felicita'", cat_aggettivi_positiviPosition, ?, ?, ?);
+                Trial:AP("Gioia", cat_aggettivi_positiviPosition, ?, ?, ?);
+                Trial:AP("Amicizia", cat_aggettivi_positiviPosition, ?, ?, ?);
+                Trial:AP("Allegria", cat_aggettivi_positiviPosition, ?, ?, ?);
+                /* Negativi */
+                Trial:AP("Guerra", cat_aggettivi_negativiPosition, ?, ?, ?);
+                Trial:AP("Odio", cat_aggettivi_negativiPosition, ?, ?, ?);
+                Trial:AP("Violenza", cat_aggettivi_negativiPosition, ?, ?, ?);
+                Trial:AP("Morte", cat_aggettivi_negativiPosition, ?, ?, ?);
+            }
 			
 			Block:B(){}
 			Block("%cat_cittadini_settentrionali%","%cittadini_settentrionali%", "%cat_aggettivi_positivi%","%aggettivi_positivi%",1, 0, 1, 0) 

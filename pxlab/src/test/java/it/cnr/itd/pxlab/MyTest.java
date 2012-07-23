@@ -12,9 +12,9 @@ public class MyTest {
 	public static void main(String[] args) {
 		ExDesign exDesign;
 		try {
-			exDesign = new ExDesign("/Users/alberto/Documents/workspace/pxlab/pxlab/src/main/resources/iat_manuel.pxd", "-S2");
+			exDesign = new ExDesign("/Users/alberto/Documents/workspace/pxlab/pxlab/src/main/resources/BIAF_alberto.pxd", "-S2");
 			if (exDesign != null) {
-				ExRun exRunCommand = new ExRun(new String[] {"-S2"}, exDesign);
+				ExRun exRunCommand = new ExRun(new String[] {"-S2","-s5","-gA"}, exDesign);
 			}
 	 	} catch (IOException e) {
 			// TODO Auto-generated catch block
