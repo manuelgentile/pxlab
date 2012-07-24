@@ -12,8 +12,8 @@ public class MyTest {
 	public static void main(String[] args) {
 		ExDesign exDesign;
 		try {
-			exDesign = new ExDesign("/home/gentile/git/github/pxlab/src/main/resources/iat_manuel.pxd", "-S2");
-			//exDesign = new ExDesign("/Users/alberto/Documents/workspace/pxlab/pxlab/src/main/resources/BIAF_alberto.pxd", "-S2");
+			//exDesign = new ExDesign("/home/gentile/git/github/pxlab/src/main/resources/iat_manuel.pxd", "-S2");
+			exDesign = new ExDesign("/Users/alberto/Documents/workspace/pxlab/pxlab/src/main/resources/BIAF_alberto.pxd", "-S2");
 			if (exDesign != null) {
 				ExRun exRunCommand = new ExRun(new String[] {"-S4","-s7","-gC", "-w800","-h600", "-R100", "-D time"}, exDesign);
 				//"-w800","-h600", "-R100", "-D time"
