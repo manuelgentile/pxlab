@@ -6,7 +6,7 @@ Experiment()
     {
       ExperimentName = "Brief Implicit Associations Test";
       SubjectCode = "pxlab";
-      new aggettivi_positivi = "Felicit� Gioia Amicizia Allegria";
+      new aggettivi_positivi = "Felicità Gioia Amicizia Allegria";
       new cittadini_settentrionali = "Milanesi Torinesi Veneziani Genovesi";
       new cittadini_meridionali = "Napoletani Palermitani Baresi Catanzaresi";
       new cat_cittadini_settentrionali = "SETTENTRIONALI";
@@ -34,7 +34,7 @@ Experiment()
     {
       Instruction()
       {
-        Text = ["In questa sezione farai un compito per valutare la tua capacit� di categorizzare degli stimoli nella maniera pi�  VELOCE ED ACCURATA possibile:", "termini %cat_aggettivi_positivi%, termini %cat_aggettivi_negativi%, abitanti di citt� %cat_cittadini_settentrionali% o abitanti di citt� %cat_cittadini_meridionali%.", "Per svolgere la prova il pi� accuratamente possibile posiziona l\'indice della mano Sinistra sul tasto E  e quello della mano Destra sul tasto I.", "Dovrai premere il tasto I o il tasto E a seconda di quale termine comparir�. Le prime due prove che vedrai servono a renderti familiare il tipo di compito da svolgere.", "Ricorda: il tuo compito � quello di  provare a classificare gli stimoli che riceverai il pi� Velocemente ed Accuratamente possibile.", "Se dovessi andare troppo lentemente o fare troppi errori la prova sar� invalidata. Non preoccuparti per qualche errore occasionale. Se farai un errore apparir� una X.", "Correggi rapidamente l\'errore premendo il tasto corretto (E o I).", " ", "Per continuare premi la barra spaziatrice."];
+        Text = ["In questa sezione farai un compito per valutare la tua capacità di categorizzare degli stimoli nella maniera più  VELOCE ED ACCURATA possibile:", "termini %cat_aggettivi_positivi%, termini %cat_aggettivi_negativi%, abitanti di città %cat_cittadini_settentrionali% o abitanti di città %cat_cittadini_meridionali%.", "Per svolgere la prova il più accuratamente possibile posiziona l\'indice della mano Sinistra sul tasto E  e quello della mano Destra sul tasto I.", "Dovrai premere il tasto I o il tasto E a seconda di quale termine comparirà. Le prime due prove che vedrai servono a renderti familiare il tipo di compito da svolgere.", "Ricorda: il tuo compito è quello di  provare a classificare gli stimoli che riceverai il più Velocemente ed Accuratamente possibile.", "Se dovessi andare troppo lentemente o fare troppi errori la prova sarà invalidata. Non preoccuparti per qualche errore occasionale. Se farai un errore apparirà una X.", "Correggi rapidamente l\'errore premendo il tasto corretto (E o I).", " ", "Per continuare premi la barra spaziatrice."];
         Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
         FontFamily = "Arial";
         FontSize = 30;
@@ -54,7 +54,7 @@ Experiment()
     {
       BlockStartMessage()
       {
-        Text = ["Premi il tasto I ogni volta che appare un termine della categoria %cat_aggettivi_positivi% sopra indicata. Premi il tasto E  per ogni altro termine.", " ", "Svolgi il compito il pi� velocemente possibile", " ", "Premi la barra spaziatrice per incominciare."];
+        Text = ["Premi il tasto I ogni volta che appare un termine della categoria %cat_aggettivi_positivi% sopra indicata. Premi il tasto E  per ogni altro termine.", " ", "Svolgi il compito il più velocemente possibile", " ", "Premi la barra spaziatrice per incominciare."];
         Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
         FontFamily = "Arial";
         FontSize = 30;
@@ -65,7 +65,7 @@ Experiment()
     {
       BlockStartMessage()
       {
-        Text = ["Premi il tasto I ogni volta che appare un termine delle categorie %cat_aggettivi_positivi% o %cat_cittadini_settentrionali% sopra indicate. Premi il tasto E  per tutti gli altri termini.", " ", "Svolgi il compito il pi� velocemente possibile", " ", "Premi la barra spaziatrice per incominciare."];
+        Text = ["Premi il tasto I ogni volta che appare un termine delle categorie %cat_aggettivi_positivi% o %cat_cittadini_settentrionali% sopra indicate. Premi il tasto E  per tutti gli altri termini.", " ", "Svolgi il compito il più velocemente possibile", " ", "Premi la barra spaziatrice per incominciare."];
         Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
         FontFamily = "Arial";
         FontSize = 30;
@@ -84,7 +84,7 @@ Experiment()
     {
       BlockStartMessage()
       {
-        Text = ["Premi il tasto I ogni volta che appare un termine delle categorie %cat_aggettivi_positivi% o %cat_cittadini_meridionali% sopra indicate. Premi il tasto E  per tutti gli altri termini.", " ", "Svolgi il compito il pi� velocemente possibile", " ", "Premi la barra spaziatrice per incominciare."];
+        Text = ["Premi il tasto I ogni volta che appare un termine delle categorie %cat_aggettivi_positivi% o %cat_cittadini_meridionali% sopra indicate. Premi il tasto E  per tutti gli altri termini.", " ", "Svolgi il compito il più velocemente possibile", " ", "Premi la barra spaziatrice per incominciare."];
         Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
         FontFamily = "Arial";
         FontSize = 30;
@@ -110,7 +110,7 @@ Experiment()
         Text = item;
         Color = yellow();
         Timer = de.pxlab.pxl.TimerCodes.RESPONSE_TIMER;
-        ResponseSet = [de.pxlab.pxl.KeyCodes.LEFT_KEY, de.pxlab.pxl.KeyCodes.RIGHT_KEY];
+        ResponseSet = [de.pxlab.pxl.KeyCodes.E_KEY, de.pxlab.pxl.KeyCodes.I_KEY];
         FontFamily = "Arial";
         FontSize = 70;
       }
@@ -121,7 +121,7 @@ Experiment()
         FalseText = "X";
         Color = red();
         Timer = de.pxlab.pxl.TimerCodes.RESPONSE_TIMER;
-        ResponseSet = (Trial:AP.Feedback.CorrectCode==0)? de.pxlab.pxl.KeyCodes.LEFT_KEY: de.pxlab.pxl.KeyCodes.RIGHT_KEY;
+        ResponseSet = (Trial:AP.Feedback.CorrectCode==0)? de.pxlab.pxl.KeyCodes.E_KEY: de.pxlab.pxl.KeyCodes.I_KEY;
         Overlay = de.pxlab.pxl.OverlayCodes.TRANSPARENT;
         FontSize = 72;
         LocationY = 280;
@@ -136,35 +136,22 @@ Experiment()
     {
       TextParagraph:A()
       {
+        Overlay = de.pxlab.pxl.OverlayCodes.DISPLAY_LIST;
         LocationX = 0;
         LocationY = -400;
         Color = cyan();
-        ReferencePoint = de.pxlab.pxl.PositionReferenceCodes.TOP_CENTER;
+        ReferencePoint = de.pxlab.pxl.PositionReferenceCodes.BASE_CENTER;
         Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
         Text = categoria1;
-        Timer = de.pxlab.pxl.TimerCodes.NO_TIMER;
-        FontFamily = "Arial";
-        FontSize = 30;
-      }
-      TextParagraph:B()
-      {
-        Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
-        LocationX = 0;
-        LocationY = -200;
-        Color = yellow();
-        ReferencePoint = de.pxlab.pxl.PositionReferenceCodes.TOP_CENTER;
-        Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
-        Text = categoria2;
         FontFamily = "Arial";
         FontSize = 30;
       }
       Message()
       {
-        Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
         Text = item;
         Color = col;
         Timer = de.pxlab.pxl.TimerCodes.RESPONSE_TIMER;
-        ResponseSet = [de.pxlab.pxl.KeyCodes.LEFT_KEY, de.pxlab.pxl.KeyCodes.RIGHT_KEY];
+        ResponseSet = [de.pxlab.pxl.KeyCodes.E_KEY, de.pxlab.pxl.KeyCodes.I_KEY];
         FontFamily = "Arial";
         FontSize = 70;
       }
@@ -175,7 +162,7 @@ Experiment()
         FalseText = "X";
         Color = red();
         Timer = de.pxlab.pxl.TimerCodes.RESPONSE_TIMER;
-        ResponseSet = (Trial:T.Feedback.CorrectCode==0)? de.pxlab.pxl.KeyCodes.LEFT_KEY: de.pxlab.pxl.KeyCodes.RIGHT_KEY;
+        ResponseSet = (Trial:T.Feedback.CorrectCode==0)? de.pxlab.pxl.KeyCodes.E_KEY: de.pxlab.pxl.KeyCodes.I_KEY;
         Overlay = de.pxlab.pxl.OverlayCodes.TRANSPARENT;
         FontSize = 72;
         LocationY = 280;
@@ -189,6 +176,9 @@ Experiment()
     // Command line assignments
 
     AssignmentGroup();
+    // Command line assignments
+
+    AssignmentGroup();
     // Session dependent assignments
 
     AssignmentGroup()
@@ -196,7 +186,7 @@ Experiment()
       SubjectCode = "pxlab";
       RemainingSessionGroup = 0;
       RemainingSessionRuns = 0;
-      Date = "20/07/12 10.17.56 CEST";
+      Date = "23/07/12 9.04.22 CEST";
       PXLabVersion = "2.1.19";
       PrimaryScreen.ColorDevice = de.pxlab.pxl.ColorDeviceTransformCodes.SONY_TRINITRON;
       PrimaryScreen.ColorDeviceDACRange = 255;
@@ -220,6 +210,48 @@ Experiment()
   }
   Procedure()
   {
-    Session();
+    Session()
+    {
+      Block:B();
+      Block( "%cat_cittadini_settentrionali%", "%cittadini_settentrionali%", "%cat_aggettivi_positivi%", "%aggettivi_positivi%", 1, 0, 1, 0)
+      {
+        Trial:T( "Felicit�", agcol, cat_aggettivi_positiviPosition, 1, 494.1053, 1676.9967);
+        Trial:T( "Palermitani", catcol, cat_cittadini_meridionaliPosition, 1, 846.6341, 115.6783);
+        Trial:T( "Allegria", agcol, cat_aggettivi_positiviPosition, 1, 26670.2056, 452.094);
+        Trial:T( "Morte", agcol, cat_aggettivi_negativiPosition, 1, 18943.1026, 332.1012);
+        Trial:T( "Baresi", catcol, cat_cittadini_meridionaliPosition, 0, 0, 68.5752);
+        Trial:T( "Guerra", agcol, cat_aggettivi_negativiPosition, 1, 366.8091, 254.4295);
+        Trial:T( "Napoletani", catcol, cat_cittadini_meridionaliPosition, 1, 350.1414, 517.7106);
+        Trial:T( "Violenza", agcol, cat_aggettivi_negativiPosition, 0, 0, 452.0163);
+        Trial:T( "Milanesi", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 446.9152);
+        Trial:T( "Odio", agcol, cat_aggettivi_negativiPosition, 0, 0, 561.0786);
+        Trial:T( "Catanzaresi", catcol, cat_cittadini_meridionaliPosition, 0, 0, 481.3461);
+        Trial:T( "Amicizia", agcol, cat_aggettivi_positiviPosition, 0, 0, 335.975);
+        Trial:T( "Veneziani", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 370.0343);
+        Trial:T( "Genovesi", catcol, cat_cittadini_settentrionaliPosition, 1, 365.9733, 560.9924);
+        Trial:T( "Gioia", agcol, cat_aggettivi_positiviPosition, 0, 0, 709.7286);
+        Trial:T( "Torinesi", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 720.4505);
+      }
+      Block:C();
+      Block( "%cat_cittadini_meridionali%", "%cittadini_meridionali%", "%cat_aggettivi_positivi%", "%aggettivi_positivi%", 0, 1, 1, 0)
+      {
+        Trial:T( "Napoletani", catcol, cat_cittadini_meridionaliPosition, 1, 398.4576, 810.2331);
+        Trial:T( "Palermitani", catcol, cat_cittadini_meridionaliPosition, 0, 0, 726.1221);
+        Trial:T( "Amicizia", agcol, cat_aggettivi_positiviPosition, 1, 366.2227, 241.7754);
+        Trial:T( "Catanzaresi", catcol, cat_cittadini_meridionaliPosition, 0, 0, 436.1872);
+        Trial:T( "Morte", agcol, cat_aggettivi_negativiPosition, 0, 0, 449.6569);
+        Trial:T( "Baresi", catcol, cat_cittadini_meridionaliPosition, 1, 318.6707, 401.229);
+        Trial:T( "Torinesi", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 646.3622);
+        Trial:T( "Guerra", agcol, cat_aggettivi_negativiPosition, 0, 0, 701.1398);
+        Trial:T( "Genovesi", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 384.616);
+        Trial:T( "Gioia", agcol, cat_aggettivi_positiviPosition, 0, 0, 418.1087);
+        Trial:T( "Odio", agcol, cat_aggettivi_negativiPosition, 0, 0, 417.6277);
+        Trial:T( "Veneziani", catcol, cat_cittadini_settentrionaliPosition, 1, 366.6441, 144.5005);
+        Trial:T( "Allegria", agcol, cat_aggettivi_positiviPosition, 1, 302.1706, 262.3637);
+        Trial:T( "Violenza", agcol, cat_aggettivi_negativiPosition, 1, 302.5267, 245.8913);
+        Trial:T( "Milanesi", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 230.0656);
+        Trial:T( "Felicit�", agcol, cat_aggettivi_positiviPosition, 0, 0, 12.1796);
+      }
+    }
   }
 }

@@ -12,7 +12,7 @@ public class MyTest {
 	public static void main(String[] args) {
 		ExDesign exDesign;
 		try {
-			exDesign = new ExDesign("/opt/prg/workspaces/staga/pxlab/src/main/resources/iat_manuel.pxd", "-S2");
+			exDesign = new ExDesign("/home/gentile/git/github/pxlab/src/main/resources/iat_manuel.pxd", "-S2");
 			if (exDesign != null) {
 				ExRun exRunCommand = new ExRun(new String[] {"-S2"}, exDesign);
 			}
