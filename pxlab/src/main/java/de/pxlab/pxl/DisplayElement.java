@@ -550,6 +550,7 @@ abstract public class DisplayElement {
 		// System.out.println("DisplayElement.textLocY() y = " + y + ", h = " +
 		// h);
 		int dy = referenceCode % 3;
+		System.out.println("DY "+dy+"\t"+y);
 		// System.out.println("  DisplayElement.textLocY() dy = " + dy);
 		if (dy > 0) {
 			y += h / 2 * dy;

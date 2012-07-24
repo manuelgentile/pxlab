@@ -193,20 +193,21 @@ Experiment() {
 		}
 		Trial:T(item,col, Feedback.CorrectCode, Feedback.Response, Feedback.ResponseTime, Message.ResponseTime) 
 		{
-			MyTextParagraph:A() {
+			TextParagraph:A() {
 				Overlay = de.pxlab.pxl.OverlayCodes.DISPLAY_LIST;
 				LocationX = 0;
-				LocationY =  -400;
+				LocationY = 0.3;
 				Color = cyan();
-				ReferencePoint = de.pxlab.pxl.PositionReferenceCodes.TOP_CENTER;
+				ReferencePoint = de.pxlab.pxl.PositionReferenceCodes.BASE_CENTER;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				Text = categoria1;
-				Timer = de.pxlab.pxl.TimerCodes.NO_TIMER;
+				
 				
 				FontFamily="Arial";
 				FontSize= 30;
 			}
 			
+			 
 			
 			Message() {
 				

@@ -1,8 +1,12 @@
 package de.pxlab.pxl;
 
-import java.awt.*;
-
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Rectangle;
 import java.util.ArrayList;
+
+import javax.swing.JLabel;
+
 import de.pxlab.util.StringExt;
 
 /**
@@ -126,10 +130,15 @@ public class MyTextParagraphElement extends DisplayElement {
 		int x = locX(referencePoint, location.x, fontMetrics.stringWidth(txt));
 		int y = textLocY(referencePoint, location.y, fontMetrics.getAscent());
 		
+		JLabel l=new JLabel(txt);
+		l.setSize(100, 100);
+		/*
+		l.paint(graphics2D);
+		l.paintImmediately(x, y, 100, 100);*/
 		
-		graphics2D.drawString(txt, x, y);
+		//graphics2D.drawString(txt, x, y);
 		
-		
+		//graphics2D.draw();
 		
 		setBounds(x, y - fontMetrics.getAscent(), fontMetrics.stringWidth(txt),
 				fontMetrics.getAscent() + fontMetrics.getDescent());
