@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>PXLab Demonstration Experiment</TITLE>
+<SCRIPT>
+  function showData(s) {
+     ergWin = window.open()
+     ergWin.document.write(s)
+  }
+</SCRIPT>
+</HEAD>
+<BODY BGCOLOR="#000000">
+<FONT face="Verdana, Arial, Helvetica">
+
+<DIV ALIGN="CENTER">
+<applet
+   archive="pxlab-0.0.1-SNAPSHOT.jar" 
+   code="de.pxlab.pxl.run.ExRunApplet.class" 
+   width=1024 height=768>
+   <param name="CommandLine" value="-S0 -gC">
+   <param name="DesignFile" value="BIAF_alberto.pxd">
+</applet>
+	
+
+</DIV>
+</P>
+</BODY>
+</HTML>
