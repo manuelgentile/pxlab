@@ -1,0 +1,104 @@
+6	A	Veneziani	NordTest	1	0	0	6316.102
+6	A	Allegria	NordTest	1	1	132.282	210.513
+6	A	Violenza	NordTest	0	0	0	101.439
+6	A	Genovesi	NordTest	1	0	0	36.99
+6	A	Milanesi	NordTest	1	1	108.337	37.595
+6	A	Morte	NordTest	0	1	77.19	109.865
+6	A	Gioia	NordTest	1	0	0	23.305
+6	A	Napoletani	NordTest	0	0	0	11.054
+6	A	Odio	NordTest	0	0	0	77.017
+6	A	Napoletani	NordTest	0	0	0	93.541
+6	A	Baresi	NordTest	0	0	0	45.696
+6	A	Odio	NordTest	0	0	0	98.36
+6	A	Gioia	NordTest	1	1	92.798	88.772
+6	A	Palermitani	NordTest	0	0	0	10.037
+6	A	Felicita'	NordTest	1	0	0	4.537
+6	A	Milanesi	NordTest	1	0	0	117.668
+6	A	Guerra	NordTest	0	0	0	4.421
+6	A	Catanzaresi	NordTest	0	0	0	149.189
+6	A	Torinesi	NordTest	1	1	108.095	115.741
+6	A	Amicizia	NordTest	1	1	110.383	4.289
+6	A	Gioia	SudTest	1	0	0	254.626
+6	A	Violenza	SudTest	0	0	0	85.236
+6	A	Morte	SudTest	0	1	149.644	27.376
+6	A	Palermitani	SudTest	1	0	0	38.451
+6	A	Baresi	SudTest	1	1	106.107	68.524
+6	A	Torinesi	SudTest	0	0	0	61.503
+6	A	Amicizia	SudTest	1	0	0	92.396
+6	A	Odio	SudTest	0	0	0	53.848
+6	A	Napoletani	SudTest	1	0	0	75.902
+6	A	Veneziani	SudTest	0	0	0	34.863
+6	A	Gioia	SudTest	1	0	0	29.414
+6	A	Allegria	SudTest	1	1	140.908	53.985
+6	A	Felicita'	SudTest	1	1	125.524	29.827
+6	A	Catanzaresi	SudTest	1	1	102.894	12.571
+6	A	Milanesi	SudTest	0	0	0	51.799
+6	A	Guerra	SudTest	0	1	142.126	37.637
+6	A	Odio	SudTest	0	1	125.202	20.87
+6	A	Napoletani	SudTest	1	0	0	78.563
+6	A	Milanesi	SudTest	0	0	0	12.52
+6	A	Genovesi	SudTest	0	1	109.666	77.304
+6	A	Gioia	PositiviApp	255		0	0
+6	A	Felicita'	PositiviApp	255		0	0
+6	A	Amicizia	PositiviApp	255		0	0
+6	A	Felicita'	PositiviApp	255		0	0
+6	A	Odio	PositiviApp	255		0	0
+6	A	Guerra	PositiviApp	255		0	0
+6	A	Guerra	PositiviApp	255		0	0
+6	A	Amicizia	PositiviApp	255		0	0
+6	A	Morte	PositiviApp	255		0	0
+6	A	Violenza	PositiviApp	255		0	0
+6	A	Odio	PositiviApp	255		0	0
+6	A	Amicizia	PositiviApp	255		0	0
+6	A	Gioia	PositiviApp	255		0	0
+6	A	Allegria	PositiviApp	255		0	0
+6	A	Odio	PositiviApp	255		0	0
+6	A	Morte	PositiviApp	255		0	0
+6	A	Allegria	PositiviApp	255		0	0
+6	A	Odio	PositiviApp	255		0	0
+6	A	Guerra	PositiviApp	255		0	0
+6	A	Amicizia	PositiviApp	255		0	0
+6	A	Guerra	PositiviApp	255		0	0
+6	A	Violenza	PositiviApp	255		0	0
+6	A	Gioia	PositiviApp	255		0	0
+6	A	Gioia	PositiviApp	255		0	0
+6	A	Morte	NordApp	0	0	0	65.127
+6	A	Baresi	NordApp	0	0	0	46.258
+6	A	Guerra	NordApp	0	0	0	51.199
+6	A	Gioia	NordApp	1	1	45.751	60.737
+6	A	Amicizia	NordApp	1	1	44.916	22.051
+6	A	Milanesi	NordApp	1	1	90.703	62.829
+6	A	Napoletani	NordApp	0	0	0	18.914
+6	A	Odio	NordApp	0	1	117.141	7.48
+6	A	Odio	NordApp	0	1	133.489	22.432
+6	A	Napoletani	NordApp	0	0	0	120.366
+6	A	Gioia	NordApp	1	1	85.242	123.832
+6	A	Veneziani	NordApp	1	1	101.438	63.791
+6	A	Milanesi	NordApp	1	1	99.626	30.287
+6	A	Catanzaresi	NordApp	0	0	0	12.305
+6	A	Palermitani	NordApp	0	1	141.264	68.944
+6	A	Allegria	NordApp	1	0	0	22.267
+6	A	Felicita'	NordApp	1	1	85.238	85.668
+6	A	Violenza	NordApp	0	0	0	92.737
+6	A	Genovesi	NordApp	1	0	0	22.511
+6	A	Torinesi	NordApp	1	1	51.276	92.425
+6	A	Odio	SudApp	0	0	0	45.264
+6	A	Allegria	SudApp	1	0	0	47.272
+6	A	Palermitani	SudApp	1	1	102.077	83.897
+6	A	Genovesi	SudApp	0	0	0	46.103
+6	A	Guerra	SudApp	0	1	101.553	46.314
+6	A	Violenza	SudApp	0	1	126.177	88.58
+6	A	Odio	SudApp	0	1	125.301	30.083
+6	A	Napoletani	SudApp	1	0	0	43.978
+6	A	Gioia	SudApp	1	1	109.535	35.437
+6	A	Torinesi	SudApp	0	1	101.499	110.089
+6	A	Amicizia	SudApp	1	0	0	23.296
+6	A	Milanesi	SudApp	0	0	0	71.641
+6	A	Morte	SudApp	0	1	109.253	40.028
+6	A	Veneziani	SudApp	0	1	100.956	31.489
+6	A	Baresi	SudApp	1	0	0	15.178
+6	A	Milanesi	SudApp	0	0	0	78.72
+6	A	Gioia	SudApp	1	1	114.11	119.256
+6	A	Catanzaresi	SudApp	1	1	117.268	55.233
+6	A	Napoletani	SudApp	1	1	90.55	70.438
+6	A	Felicita'	SudApp	1	1	101.67	79.296

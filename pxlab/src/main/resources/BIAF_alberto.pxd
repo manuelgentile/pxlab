@@ -19,8 +19,9 @@ Experiment() {
 			new cat_cittadini_meridionali = "MERIDIONALI";
 			new cat_aggettivi_positivi = "POSITIVI";
 			new cat_aggettivi_negativi = "NEGATIVI";
-			new categoria1="categoria1";
-			new categoria2="categoria2";
+			new categoria1="";
+			new categoria2="";
+			new categories="";
 			new descrizione_categoria1="des_categoria1";
 			new descrizione_categoria2="des_categoria2";
 			new categories = 0;
@@ -81,7 +82,7 @@ Experiment() {
 			  //**************PARTE DI APPRENDIMENTO***********************************
 			  
 			  
-		Block(TrialFactor,ActiveSubjectGroups,categoria1,descrizione_categoria1,categoria2,descrizione_categoria2, 
+		Block(TrialFactor,ActiveSubjectGroups,categories,categoria1,descrizione_categoria1,categoria2,descrizione_categoria2, 
 			cat_cittadini_settentrionaliPosition, cat_cittadini_meridionaliPosition, cat_aggettivi_positiviPosition, cat_aggettivi_negativiPosition) 
 		{
 			
@@ -259,15 +260,15 @@ Experiment() {
 			TextParagraphMultiple:A() {
 				Overlay = de.pxlab.pxl.OverlayCodes.DISPLAY_LIST;
 				LocationX = [0,0];
-				LocationY =  [-300,-200];
-				Color = [56,57];
+				LocationY =  [-350,-300];
+				Color = [53,52];
 				ReferencePoint = de.pxlab.pxl.PositionReferenceCodes.TOP_CENTER;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
-				Text = ["xx", "rr"];
+				Text = categories;
 				Timer = de.pxlab.pxl.TimerCodes.NO_TIMER;
 				
 				FontFamily="Arial";
-				FontSize= 30;
+				FontSize= 35;
 			}
 		
 			
@@ -305,7 +306,7 @@ Experiment() {
 		{
 		
 		Block:B("A"){}// COERENTI NORD 
-			Block(1,"A","%cat_cittadini_settentrionali%","%cittadini_settentrionali%", "%cat_aggettivi_positivi%","%aggettivi_positivi%",1, 0, 1, 0) 
+			Block(1,"C",["%cat_cittadini_settentrionali%","%cat_aggettivi_positivi%"], "%cat_cittadini_settentrionali%","%cittadini_settentrionali%", "%cat_aggettivi_positivi%","%aggettivi_positivi%",1, 0, 1, 0) 
 			{
 				/* Meridionali */
 				Trial:T("NordTest", "Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
@@ -336,7 +337,7 @@ Experiment() {
 			}
 
 			Block:C("A"){} // COERENTI SUD 
-			Block(1,"A", "%cat_cittadini_meridionali%","%cittadini_meridionali%","%cat_aggettivi_positivi%","%aggettivi_positivi%", 0, 1, 1, 0)
+			Block(1,"A", ["%cat_cittadini_meridionali%","%cat_aggettivi_positivi%"],"%cat_cittadini_meridionali%","%cittadini_meridionali%","%cat_aggettivi_positivi%","%aggettivi_positivi%", 0, 1, 1, 0)
 			{
 				/* Meridionali */
 				Trial:T("SudTest","Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
@@ -367,7 +368,7 @@ Experiment() {
 		
 		
 		Block:C("B"){} // COERENTI SUD 
-			Block(1,"B", "%cat_cittadini_meridionali%","%cittadini_meridionali%","%cat_aggettivi_positivi%","%aggettivi_positivi%", 0, 1, 1, 0)
+			Block(1,"B", ["%cat_cittadini_meridionali%","%cat_aggettivi_positivi%"],"%cat_cittadini_meridionali%","%cittadini_meridionali%","%cat_aggettivi_positivi%","%aggettivi_positivi%", 0, 1, 1, 0)
 			{
 				/* Meridionali */
 				Trial:T("SudTest","Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
@@ -400,7 +401,7 @@ Experiment() {
 		
 		
 		Block:B("B"){}// COERENTI NORD 
-			Block(1,"B","%cat_cittadini_settentrionali%","%cittadini_settentrionali%", "%cat_aggettivi_positivi%","%aggettivi_positivi%",1, 0, 1, 0) 
+			Block(1,"B",["%cat_cittadini_settentrionali%","%cat_aggettivi_positivi%"],"%cat_cittadini_settentrionali%","%cittadini_settentrionali%", "%cat_aggettivi_positivi%","%aggettivi_positivi%",1, 0, 1, 0) 
 			{
 				/* Meridionali */
 				Trial:T("NordTest","Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
@@ -456,7 +457,7 @@ Experiment() {
             }
 			
 			Block:B(["A","B"]){}// COERENTI NORD APPRENDIMENTO
-			Block(1,["A","B"],"%cat_cittadini_settentrionali%","%cittadini_settentrionali%", "%cat_aggettivi_positivi%","%aggettivi_positivi%",1, 0, 1, 0) 
+			Block(1,["A","B"],["%cat_cittadini_settentrionali%","%cat_aggettivi_positivi%"],"%cat_cittadini_settentrionali%","%cittadini_settentrionali%", "%cat_aggettivi_positivi%","%aggettivi_positivi%",1, 0, 1, 0) 
 			{
 				/* Meridionali */
 				Trial:T("NordApp","Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
@@ -487,7 +488,7 @@ Experiment() {
 			}
 
 			Block:C(["A","B"]){} // COERENTI SUD APPRENDIMENTO
-			Block(1,["A","B"], "%cat_cittadini_meridionali%","%cittadini_meridionali%","%cat_aggettivi_positivi%","%aggettivi_positivi%", 0, 1, 1, 0)
+			Block(1,["A","B"], ["%cat_cittadini_meridionali%","%cat_aggettivi_positivi%"],"%cat_cittadini_meridionali%","%cittadini_meridionali%","%cat_aggettivi_positivi%","%aggettivi_positivi%", 0, 1, 1, 0)
 			{
 				/* Meridionali */
 				Trial:T("SudApp","Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);

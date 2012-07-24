@@ -14,7 +14,7 @@ public class MyTest {
 		try {
 			exDesign = new ExDesign("/Users/alberto/Documents/workspace/pxlab/pxlab/src/main/resources/BIAF_alberto.pxd", "-S2");
 			if (exDesign != null) {
-				ExRun exRunCommand = new ExRun(new String[] {"-S2","-s6","-gA"}, exDesign);
+				ExRun exRunCommand = new ExRun(new String[] {"-S4","-s7","-gC", "-w800","-h600", "-R100", "-D time"}, exDesign);
 				//"-w800","-h600", "-R100", "-D time"
 			}
 	 	} catch (IOException e) {
