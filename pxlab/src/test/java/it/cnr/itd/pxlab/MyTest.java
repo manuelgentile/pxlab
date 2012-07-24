@@ -6,7 +6,7 @@ import de.pxlab.pxl.ExDesign;
 import de.pxlab.pxl.run.ExRun;
 
 public class MyTest {
-	/**
+	/** 
 	 * @param args
 	 */
 	public static void main(String[] args) {
