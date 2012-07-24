@@ -1,0 +1,408 @@
+Experiment()
+{
+  Context()
+  {
+    AssignmentGroup()
+    {
+      ExperimentName = "Brief Implicit Associations Test";
+      SubjectCode = "";
+      SubjectGroup = "";
+      DataFileDestination = "/Users/alberto/Documents/workspace/pxlab/pxlab/";
+      new aggettivi_positivi = "Felicita\' Gioia Amicizia Allegria";
+      new cittadini_settentrionali = "Milanesi Torinesi Veneziani Genovesi";
+      new cittadini_meridionali = "Napoletani Palermitani Baresi Catanzaresi";
+      new cat_cittadini_settentrionali = "SETTENTRIONALI";
+      new cat_cittadini_meridionali = "MERIDIONALI";
+      new cat_aggettivi_positivi = "POSITIVI";
+      new cat_aggettivi_negativi = "NEGATIVI";
+      new categoria1 = "categoria1";
+      new categoria2 = "categoria2";
+      new descrizione_categoria1 = "des_categoria1";
+      new descrizione_categoria2 = "des_categoria2";
+      new categories = 0;
+      new categories1 = 0;
+      new item = 0;
+      new col = 0;
+      new agcol = yellow();
+      new catcol = cyan();
+      new cat_cittadini_settentrionaliPosition = 0;
+      new cat_cittadini_meridionaliPosition = 0;
+      new cat_aggettivi_positiviPosition = 0;
+      new cat_aggettivi_negativiPosition = 0;
+      new testo1 = 0;
+      SkipBoundingBlockDisplays = 0;
+      DataFileTrialFormat = "%SubjectCode%\t%SubjectGroup%\t%item%\t%col%\t%Trial:T.Message.ResponseTime%";
+    }
+    Session()
+    {
+      Instruction()
+      {
+        Text = ["In questa sezione farai un compito per valutare la tua capacita\' di categorizzare degli stimoli nella maniera piu\'  VELOCE ED ACCURATA possibile:", "termini \'%cat_aggettivi_positivi%\', termini \'%cat_aggettivi_negativi%\', abitanti di citta\' \'%cat_cittadini_settentrionali%\' o abitanti di citta\' \'%cat_cittadini_meridionali%\'.", "Per svolgere la prova il piu\' accuratamente possibile posiziona l\'indice della mano Sinistra sul tasto ~ E ~  e quello della mano Destra sul tasto ~ I ~.", "Dovrai premere il tasto I o il tasto E a seconda di quale termine comparira\'. Le prime due prove che vedrai servono a renderti familiare il tipo di compito da svolgere.", "Ricorda: il tuo compito e\' quello di  provare a classificare gli stimoli che riceverai il piu\' Velocemente ed Accuratamente possibile.", "Se dovessi andare troppo lentemente o fare troppi errori la prova sara\' invalidata. Non preoccuparti per qualche errore occasionale. Se farai un errore apparira\' una ~ X ~.", "Correggi rapidamente l\'errore premendo il tasto corretto (E o I).", " ", "Per continuare premi la barra spaziatrice."];
+        Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
+        FontFamily = "Arial";
+        FontSize = 25;
+      }
+      TextParagraph:cat1()
+      {
+        Color = yellow();
+        LocationY = -300;
+        Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
+        Text = ["%cat_aggettivi_positivi%", "%aggettivi_positivi%"];
+        Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
+        FontFamily = "Arial";
+        FontSize = 30;
+        ResponseSet = de.pxlab.pxl.KeyCodes.SPACE_KEY;
+      }
+    }
+    SessionEnd()
+    {
+      SessionEndMessage()
+      {
+        Text = "FINE!";
+      }
+    }
+    //**************PARTE DI APPRENDIMENTO***********************************
+
+    Block( TrialFactor, ActiveSubjectGroups, categoria1, descrizione_categoria1, categoria2, descrizione_categoria2, cat_cittadini_settentrionaliPosition, cat_cittadini_meridionaliPosition, cat_aggettivi_positiviPosition, cat_aggettivi_negativiPosition);
+    Block:A()
+    {
+      BlockStartMessage()
+      {
+        Text = ["Premi il tasto ~ I ~ ogni volta che appare un termine della categoria %cat_aggettivi_positivi% sopra indicata. Premi il tasto ~ E ~ per ogni altro termine.", " ", "Svolgi il compito il piu\' velocemente possibile", " ", "Premi la barra spaziatrice per incominciare."];
+        Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
+        FontFamily = "Arial";
+        FontSize = 30;
+      }
+      TextParagraph:cat1()
+      {
+        Color = yellow();
+        LocationY = -300;
+        Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
+        Text = ["%cat_aggettivi_positivi%", "%aggettivi_positivi%"];
+        Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
+        FontFamily = "Arial";
+        FontSize = 30;
+        ResponseSet = de.pxlab.pxl.KeyCodes.SPACE_KEY;
+      }
+    }
+    Block:APP( TrialFactor, categoria1, cat_aggettivi_positiviPosition, cat_aggettivi_negativiPosition);
+    Block:B( ActiveSubjectGroups)
+    {
+      BlockStartMessage()
+      {
+        Text = ["Premi il tasto ~ I ~ ogni volta che appare un termine delle categorie \'%cat_aggettivi_positivi%\' o \'%cat_cittadini_settentrionali%\' sopra indicate. Premi il tasto ~ E ~  per tutti gli altri termini.", " ", "Svolgi il compito il piu\' velocemente possibile", " ", "Premi la barra spaziatrice per incominciare."];
+        Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
+        FontFamily = "Arial";
+        FontSize = 25;
+      }
+      TextParagraph:cat2()
+      {
+        Color = cyan();
+        LocationY = -300;
+        Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
+        Text = ["%cat_cittadini_settentrionali%", "%cittadini_settentrionali%"];
+        Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
+        FontFamily = "Arial";
+        FontSize = 30;
+        ResponseSet = de.pxlab.pxl.KeyCodes.SPACE_KEY;
+      }
+      TextParagraph:cat1()
+      {
+        Color = yellow();
+        LocationY = -200;
+        Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
+        Text = ["%cat_aggettivi_positivi%", "%aggettivi_positivi%"];
+        Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
+        FontFamily = "Arial";
+        FontSize = 30;
+        ResponseSet = de.pxlab.pxl.KeyCodes.SPACE_KEY;
+      }
+    }
+    Block:C( ActiveSubjectGroups)
+    {
+      BlockStartMessage()
+      {
+        Text = ["Premi il tasto ~ I ~ ogni volta che appare un termine delle categorie \'%cat_aggettivi_positivi%\' o \'%cat_cittadini_meridionali%\' sopra indicate. Premi il tasto ~ E ~ per tutti gli altri termini.", " ", "Svolgi il compito il piu\' velocemente possibile", " ", "Premi la barra spaziatrice per incominciare."];
+        Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
+        FontFamily = "Arial";
+        FontSize = 25;
+      }
+      TextParagraph:cat2()
+      {
+        Color = cyan();
+        LocationY = -300;
+        Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
+        Text = ["%cat_cittadini_meridionali%", "%cittadini_meridionali%"];
+        Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
+        FontFamily = "Arial";
+        FontSize = 30;
+        ResponseSet = de.pxlab.pxl.KeyCodes.SPACE_KEY;
+      }
+      TextParagraph:cat1()
+      {
+        Color = yellow();
+        LocationY = -200;
+        Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
+        Text = ["%cat_aggettivi_positivi%", "%aggettivi_positivi%"];
+        Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
+        FontFamily = "Arial";
+        FontSize = 30;
+        ResponseSet = de.pxlab.pxl.KeyCodes.SPACE_KEY;
+      }
+    }
+    Trial:AP( item, Feedback.CorrectCode, Feedback.Response, Feedback.ResponseTime, Message.ResponseTime)
+    {
+      TextParagraph:cat1()
+      {
+        LocationX = 0;
+        LocationY = -300;
+        Color = yellow();
+        ReferencePoint = de.pxlab.pxl.PositionReferenceCodes.TOP_CENTER;
+        Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
+        Text = categoria1;
+        Timer = de.pxlab.pxl.TimerCodes.NO_TIMER;
+        FontFamily = "Arial";
+        FontSize = 30;
+        Overlay = de.pxlab.pxl.OverlayCodes.DISPLAY_LIST;
+      }
+      Message()
+      {
+        //Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
+
+        Text = item;
+        Color = yellow();
+        Timer = de.pxlab.pxl.TimerCodes.RESPONSE_TIMER;
+        ResponseSet = [de.pxlab.pxl.KeyCodes.E_KEY, de.pxlab.pxl.KeyCodes.I_KEY];
+        FontFamily = "Arial";
+        FontSize = 70;
+      }
+      Feedback()
+      {
+        ResponseParameter = Trial:AP.Message.ResponseCode;
+        Evaluation = CHECK_NOGO;
+        FalseText = "X";
+        Color = red();
+        Timer = de.pxlab.pxl.TimerCodes.RESPONSE_TIMER;
+        ResponseSet = (Trial:AP.Feedback.CorrectCode==0)? de.pxlab.pxl.KeyCodes.E_KEY: de.pxlab.pxl.KeyCodes.I_KEY;
+        Overlay = de.pxlab.pxl.OverlayCodes.TRANSPARENT;
+        FontSize = 72;
+        LocationY = 280;
+      }
+      ClearScreen()
+      {
+        Timer = de.pxlab.pxl.TimerCodes.CLOCK_TIMER;
+        Duration = 500;
+      }
+    }
+    Trial:T( item, col, Feedback.CorrectCode, Feedback.Response, Feedback.ResponseTime, Message.ResponseTime)
+    {
+      TextParagraphMultiple:A()
+      {
+        Overlay = de.pxlab.pxl.OverlayCodes.DISPLAY_LIST;
+        LocationX = 0;
+        LocationY = -300;
+        Color = cyan();
+        ReferencePoint = de.pxlab.pxl.PositionReferenceCodes.TOP_CENTER;
+        Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
+        Text = categoria1;
+        Timer = de.pxlab.pxl.TimerCodes.NO_TIMER;
+        FontFamily = "Arial";
+        FontSize = 30;
+      }
+      Message()
+      {
+        Text = item;
+        Color = col;
+        Timer = de.pxlab.pxl.TimerCodes.RESPONSE_TIMER;
+        ResponseSet = [de.pxlab.pxl.KeyCodes.E_KEY, de.pxlab.pxl.KeyCodes.I_KEY];
+        FontFamily = "Arial";
+        FontSize = 70;
+      }
+      Feedback()
+      {
+        ResponseParameter = Trial:T.Message.ResponseCode;
+        Evaluation = CHECK_NOGO;
+        FalseText = "X";
+        Color = red();
+        Timer = de.pxlab.pxl.TimerCodes.RESPONSE_TIMER;
+        ResponseSet = (Trial:T.Feedback.CorrectCode==0)? de.pxlab.pxl.KeyCodes.E_KEY: de.pxlab.pxl.KeyCodes.I_KEY;
+        Overlay = de.pxlab.pxl.OverlayCodes.TRANSPARENT;
+        FontSize = 72;
+        LocationY = 280;
+      }
+      ClearScreen()
+      {
+        Timer = de.pxlab.pxl.TimerCodes.CLOCK_TIMER;
+        Duration = 500;
+      }
+    }
+    // Command line assignments
+
+    AssignmentGroup();
+    // Command line assignments
+
+    AssignmentGroup()
+    {
+      SubjectCode = 2;
+      SubjectGroup = "B";
+    }
+    // Session dependent assignments
+
+    AssignmentGroup()
+    {
+      SubjectCode = 2;
+      RemainingSessionGroup = 0;
+      RemainingSessionRuns = 0;
+      Date = "22/07/12 19.11.57 CEST";
+      PXLabVersion = "2.1.19";
+      PrimaryScreen.ColorDevice = de.pxlab.pxl.ColorDeviceTransformCodes.SONY_TRINITRON;
+      PrimaryScreen.ColorDeviceDACRange = 255;
+      PrimaryScreen.RedPrimary = [21.26, 0.621, 0.34];
+      PrimaryScreen.GreenPrimary = [71.52, 0.281, 0.606];
+      PrimaryScreen.BluePrimary = [7.22, 0.152, 0.067];
+      PrimaryScreen.RedGamma = [2.4, 1];
+      PrimaryScreen.GreenGamma = [2.4, 1];
+      PrimaryScreen.BlueGamma = [2.4, 1];
+      SecondaryScreen.ColorDevice = de.pxlab.pxl.ColorDeviceTransformCodes.SONY_TRINITRON;
+      SecondaryScreen.ColorDeviceDACRange = 255;
+      SecondaryScreen.RedPrimary = [21.26, 0.621, 0.34];
+      SecondaryScreen.GreenPrimary = [71.52, 0.281, 0.606];
+      SecondaryScreen.BluePrimary = [7.22, 0.152, 0.067];
+      SecondaryScreen.RedGamma = [2.4, 1];
+      SecondaryScreen.GreenGamma = [2.4, 1];
+      SecondaryScreen.BlueGamma = [2.4, 1];
+      DeviceWhitePoint = [100, 0.3065, 0.3468];
+      CIEWhitePoint = 0;
+    }
+  }
+  Procedure()
+  {
+    Session()
+    {
+      Block:C( "B");
+      Block( 1, "B", "%cat_cittadini_meridionali%", "%cittadini_meridionali%", "%cat_aggettivi_positivi%", "%aggettivi_positivi%", 0, 1, 1, 0)
+      {
+        Trial:T( "Guerra", agcol, cat_aggettivi_negativiPosition, 0, 0, 793.028);
+        Trial:T( "Torinesi", catcol, cat_cittadini_settentrionaliPosition, 1, 454.639, 252.265);
+        Trial:T( "Milanesi", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 91.147);
+        Trial:T( "Napoletani", catcol, cat_cittadini_meridionaliPosition, 1, 95.208, 13.287);
+        Trial:T( "Napoletani", catcol, cat_cittadini_meridionaliPosition, 0, 0, 6.039);
+        Trial:T( "Morte", agcol, cat_aggettivi_negativiPosition, 0, 0, 186.822);
+        Trial:T( "Odio", agcol, cat_aggettivi_negativiPosition, 0, 0, 6.847);
+        Trial:T( "Allegria", agcol, cat_aggettivi_positiviPosition, 1, 87.231, 6.314);
+        Trial:T( "Odio", agcol, cat_aggettivi_negativiPosition, 0, 0, 175.282);
+        Trial:T( "Gioia", agcol, cat_aggettivi_positiviPosition, 1, 95.175, 22.206);
+        Trial:T( "Gioia", agcol, cat_aggettivi_positiviPosition, 0, 0, 8.01);
+        Trial:T( "Veneziani", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 173.864);
+        Trial:T( "Amicizia", agcol, cat_aggettivi_positiviPosition, 1, 102.484, 15.334);
+        Trial:T( "Violenza", agcol, cat_aggettivi_negativiPosition, 1, 167.348, 16.175);
+        Trial:T( "Milanesi", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 40.256);
+        Trial:T( "Catanzaresi", catcol, cat_cittadini_meridionaliPosition, 1, 95.087, 22.055);
+        Trial:T( "Felicita\'", agcol, cat_aggettivi_positiviPosition, 0, 0, 0.188);
+        Trial:T( "Baresi", catcol, cat_cittadini_meridionaliPosition, 0, 0, 30.294);
+        Trial:T( "Palermitani", catcol, cat_cittadini_meridionaliPosition, 0, 0, 15.565);
+        Trial:T( "Genovesi", catcol, cat_cittadini_settentrionaliPosition, 1, 182.877, 14.672);
+      }
+      Block:B( "B");
+      Block( 1, "B", "%cat_cittadini_settentrionali%", "%cittadini_settentrionali%", "%cat_aggettivi_positivi%", "%aggettivi_positivi%", 1, 0, 1, 0)
+      {
+        Trial:T( "Gioia", agcol, cat_aggettivi_positiviPosition, 1, 103.321, 355.057);
+        Trial:T( "Milanesi", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 22.203);
+        Trial:T( "Violenza", agcol, cat_aggettivi_negativiPosition, 1, 182.441, 7.56);
+        Trial:T( "Genovesi", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 103.686);
+        Trial:T( "Felicita\'", agcol, cat_aggettivi_positiviPosition, 0, 0, 5.38);
+        Trial:T( "Napoletani", catcol, cat_cittadini_meridionaliPosition, 1, 166.359, 39.867);
+        Trial:T( "Baresi", catcol, cat_cittadini_meridionaliPosition, 0, 0, 30.655);
+        Trial:T( "Allegria", agcol, cat_aggettivi_positiviPosition, 1, 112.006, 14.846);
+        Trial:T( "Odio", agcol, cat_aggettivi_negativiPosition, 1, 198.848, 6.895);
+        Trial:T( "Morte", agcol, cat_aggettivi_negativiPosition, 0, 0, 16.345);
+        Trial:T( "Odio", agcol, cat_aggettivi_negativiPosition, 0, 0, 19.013);
+        Trial:T( "Catanzaresi", catcol, cat_cittadini_meridionaliPosition, 0, 0, 18.783);
+        Trial:T( "Amicizia", agcol, cat_aggettivi_positiviPosition, 0, 0, 94.676);
+        Trial:T( "Palermitani", catcol, cat_cittadini_meridionaliPosition, 1, 199.446, 6.086);
+        Trial:T( "Torinesi", catcol, cat_cittadini_settentrionaliPosition, 1, 95.622, 14.848);
+        Trial:T( "Napoletani", catcol, cat_cittadini_meridionaliPosition, 1, 198.315, 24.59);
+        Trial:T( "Guerra", agcol, cat_aggettivi_negativiPosition, 0, 0, 31.828);
+        Trial:T( "Milanesi", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 102.881);
+        Trial:T( "Veneziani", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 31.746);
+        Trial:T( "Gioia", agcol, cat_aggettivi_positiviPosition, 0, 0, 14.86);
+      }
+      Block:A();
+      Block:APP( 2, "%cat_aggettivi_positivi%", 1, 0)
+      {
+        Trial:AP( "Amicizia", cat_aggettivi_positiviPosition, 1, 118.706, 116.054);
+        Trial:AP( "Amicizia", cat_aggettivi_positiviPosition, 0, 0, 31.272);
+        Trial:AP( "Felicita\'", cat_aggettivi_positiviPosition, 0, 0, 20.272);
+        Trial:AP( "Amicizia", cat_aggettivi_positiviPosition, 0, 0, 35.657);
+        Trial:AP( "Morte", cat_aggettivi_negativiPosition, 1, 198.766, 31.724);
+        Trial:AP( "Guerra", cat_aggettivi_negativiPosition, 0, 0, 31.811);
+        Trial:AP( "Allegria", cat_aggettivi_positiviPosition, 1, 94.809, 31.49);
+        Trial:AP( "Odio", cat_aggettivi_negativiPosition, 1, 206.771, 8.514);
+        Trial:AP( "Odio", cat_aggettivi_negativiPosition, 0, 0, 8.748);
+        Trial:AP( "Gioia", cat_aggettivi_positiviPosition, 1, 94.499, 23.467);
+        Trial:AP( "Morte", cat_aggettivi_negativiPosition, 1, 199.566, 47.696);
+        Trial:AP( "Allegria", cat_aggettivi_positiviPosition, 1, 71.21, 8.253);
+        Trial:AP( "Odio", cat_aggettivi_negativiPosition, 1, 206.171, 41.068);
+        Trial:AP( "Gioia", cat_aggettivi_positiviPosition, 1, 78.469, 24.774);
+        Trial:AP( "Guerra", cat_aggettivi_negativiPosition, 1, 207.43, 23.425);
+        Trial:AP( "Gioia", cat_aggettivi_positiviPosition, 1, 71.59, 31.912);
+        Trial:AP( "Violenza", cat_aggettivi_negativiPosition, 1, 190.617, 40.574);
+        Trial:AP( "Odio", cat_aggettivi_negativiPosition, 0, 0, 24.209);
+        Trial:AP( "Violenza", cat_aggettivi_negativiPosition, 0, 0, 31.177);
+        Trial:AP( "Gioia", cat_aggettivi_positiviPosition, 1, 95.254, 31.682);
+        Trial:AP( "Amicizia", cat_aggettivi_positiviPosition, 0, 0, 13.884);
+        Trial:AP( "Guerra", cat_aggettivi_negativiPosition, 1, 174.963, 47.802);
+        Trial:AP( "Felicita\'", cat_aggettivi_positiviPosition, 1, 78.319, 55.205);
+        Trial:AP( "Guerra", cat_aggettivi_negativiPosition, 1, 167.001, 65.073);
+      }
+      Block:B( ["A", "B"]);
+      Block( 1, ["A", "B"], "%cat_cittadini_settentrionali%", "%cittadini_settentrionali%", "%cat_aggettivi_positivi%", "%aggettivi_positivi%", 1, 0, 1, 0)
+      {
+        Trial:T( "Odio", agcol, cat_aggettivi_negativiPosition, 0, 0, 111.518);
+        Trial:T( "Felicita\'", agcol, cat_aggettivi_positiviPosition, 1, 86.676, 61.19);
+        Trial:T( "Allegria", agcol, cat_aggettivi_positiviPosition, 0, 0, 39.579);
+        Trial:T( "Baresi", catcol, cat_cittadini_meridionaliPosition, 0, 0, 172.46);
+        Trial:T( "Catanzaresi", catcol, cat_cittadini_meridionaliPosition, 0, 0, 14.098);
+        Trial:T( "Gioia", agcol, cat_aggettivi_positiviPosition, 1, 78.598, 14.898);
+        Trial:T( "Milanesi", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 39.275);
+        Trial:T( "Violenza", agcol, cat_aggettivi_negativiPosition, 1, 198.905, 22.575);
+        Trial:T( "Milanesi", catcol, cat_cittadini_settentrionaliPosition, 1, 95.357, 23.271);
+        Trial:T( "Veneziani", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 14.536);
+        Trial:T( "Morte", agcol, cat_aggettivi_negativiPosition, 1, 223.266, 14.871);
+        Trial:T( "Palermitani", catcol, cat_cittadini_meridionaliPosition, 0, 0, 14.397);
+        Trial:T( "Odio", agcol, cat_aggettivi_negativiPosition, 0, 0, 51.658);
+        Trial:T( "Torinesi", catcol, cat_cittadini_settentrionaliPosition, 1, 71.468, 27.247);
+        Trial:T( "Napoletani", catcol, cat_cittadini_meridionaliPosition, 1, 191.157, 31.016);
+        Trial:T( "Gioia", agcol, cat_aggettivi_positiviPosition, 1, 54.723, 47.264);
+        Trial:T( "Napoletani", catcol, cat_cittadini_meridionaliPosition, 1, 165.917, 63.239);
+        Trial:T( "Amicizia", agcol, cat_aggettivi_positiviPosition, 1, 55.491, 55.639);
+        Trial:T( "Genovesi", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 54.675);
+        Trial:T( "Guerra", agcol, cat_aggettivi_negativiPosition, 1, 206.615, 13.977);
+      }
+      Block:C( ["A", "B"]);
+      Block( 1, ["A", "B"], "%cat_cittadini_meridionali%", "%cittadini_meridionali%", "%cat_aggettivi_positivi%", "%aggettivi_positivi%", 0, 1, 1, 0)
+      {
+        Trial:T( "Allegria", agcol, cat_aggettivi_positiviPosition, 1, 103.231, 51.134);
+        Trial:T( "Amicizia", agcol, cat_aggettivi_positiviPosition, 0, 0, 71.027);
+        Trial:T( "Napoletani", catcol, cat_cittadini_meridionaliPosition, 0, 0, 6.607);
+        Trial:T( "Odio", agcol, cat_aggettivi_negativiPosition, 1, 191.175, 53.455);
+        Trial:T( "Veneziani", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 47.176);
+        Trial:T( "Violenza", agcol, cat_aggettivi_negativiPosition, 0, 0, 34.287);
+        Trial:T( "Torinesi", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 36.781);
+        Trial:T( "Catanzaresi", catcol, cat_cittadini_meridionaliPosition, 1, 87.221, 30.1);
+        Trial:T( "Morte", agcol, cat_aggettivi_negativiPosition, 1, 214.328, 31.09);
+        Trial:T( "Palermitani", catcol, cat_cittadini_meridionaliPosition, 1, 102.237, 24.3);
+        Trial:T( "Gioia", agcol, cat_aggettivi_positiviPosition, 0, 0, 22.324);
+        Trial:T( "Gioia", agcol, cat_aggettivi_positiviPosition, 0, 0, 54.565);
+        Trial:T( "Odio", agcol, cat_aggettivi_negativiPosition, 1, 198.927, 30.306);
+        Trial:T( "Guerra", agcol, cat_aggettivi_negativiPosition, 0, 0, 12.521);
+        Trial:T( "Genovesi", catcol, cat_cittadini_settentrionaliPosition, 0, 0, 39.552);
+        Trial:T( "Felicita\'", agcol, cat_aggettivi_positiviPosition, 1, 94.156, 45.38);
+        Trial:T( "Milanesi", catcol, cat_cittadini_settentrionaliPosition, 1, 231.17, 15.394);
+        Trial:T( "Napoletani", catcol, cat_cittadini_meridionaliPosition, 1, 79.625, 40.049);
+        Trial:T( "Milanesi", catcol, cat_cittadini_settentrionaliPosition, 1, 199.748, 45.802);
+        Trial:T( "Baresi", catcol, cat_cittadini_meridionaliPosition, 1, 78.899, 34.188);
+      }
+    }
+  }
+}
