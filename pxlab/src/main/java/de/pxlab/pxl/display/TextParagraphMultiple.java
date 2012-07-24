@@ -2,7 +2,7 @@ package de.pxlab.pxl.display;
 
 import java.awt.*;
 import de.pxlab.pxl.*;
- 
+
 /**
  * Shows multiple paragraphs of text. The paragraphs' text content and positions
  * are independent and my be defined by setting the respective parameters to
