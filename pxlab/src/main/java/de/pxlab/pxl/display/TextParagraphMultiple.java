@@ -43,19 +43,21 @@ public class TextParagraphMultiple extends TextParagraph {
 	}
 
 	protected void computeGeometry() {
+		int[] colors=Color.getIntArray();
 		String[] txt = Text.getStringArray();
 		int nn = txt.length;
 		// Check whether the number of text elements has changed
 		if (nn != n) {
 			removeDisplayElements(firstDisplayElement);
 			for (int i = 0; i < nn; i++) {
-				enterDisplayElement(new TextParagraphElement(this.Color),
+				enterDisplayElement(new TextParagraphElement(colors[i]),
 						group[0]);
 			}
 			n = nn;
 		}
 		double w = Width.getDouble();
 		int ww = (w < 1.0) ? (int) (width * w) : (int) w;
+		
 		int[] x = LocationX.getIntArray();
 		int[] y = LocationY.getIntArray();
 		int[] r = ReferencePoint.getIntArray();
