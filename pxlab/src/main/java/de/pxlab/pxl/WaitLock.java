@@ -46,7 +46,7 @@ public class WaitLock {
 			long t0 = t - sleepBound;
 			long t1 = t - yieldBound;
 			
-			System.out.println(t+"\t"+t0+"\t"+t1);
+			//System.out.println(t+"\t"+t0+"\t"+t1);
 			
 			waiting = true;
 			if (rm == null) {
@@ -58,23 +58,23 @@ public class WaitLock {
 				
 				while (waiting && (HiresClock.getTimeNanos() < t0)) {
 					
-					System.out.println(i++);
+					//System.out.println(i++);
 					
 					try {
 						Thread.sleep(1);
 					} catch (InterruptedException iex) {
 					}
 				}
-				System.out.println("stop\t"+i++);
+				//System.out.println("stop\t"+i++);
 				while (waiting && (HiresClock.getTimeNanos() < t1)) {
 					Thread.yield();
-					System.out.println(i++);
+					//System.out.println(i++);
 				}
-				System.out.println("stop2\t"+i++);
+				//System.out.println("stop2\t"+i++);
 				while (waiting && (HiresClock.getTimeNanos() < t)) {
-					System.out.println(i++);
+					//System.out.println(i++);
 				}
-				System.out.println("stop3\t"+i++);
+				//System.out.println("stop3\t"+i++);
 				
 				
 				//LockSupport.parkNanos(nanoDuration);

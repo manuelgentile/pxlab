@@ -1324,11 +1324,14 @@ abstract public class Display extends DisplaySupport implements ExParTypeCodes,
 			// The image is already preloaded, we only have to switch buffers
 			// System.out.println("Display.showCurrentTimingGroup(): show preloaded image for "
 			// + getInstanceName());
+			//System.out.println(vsync);
+			
 			if (vsync)
 				VideoSystem.waitForBeginOfVerticalBlank();
 			displayDevice.show();
 			Debug.time("Preloaded image shown: -----> ");
 		} else {
+			
 			Image mb = te.getMemoryBufferImage();
 			if (mb != null) {
 				// We get here for objects which can do preloading but
@@ -1402,6 +1405,7 @@ abstract public class Display extends DisplaySupport implements ExParTypeCodes,
 				}
 			}
 		}
+		
 		long tmc = HiresClock.getTimeNanos();
 		// Moved to the PresentationManager in order to handle tracking timers
 		// properly

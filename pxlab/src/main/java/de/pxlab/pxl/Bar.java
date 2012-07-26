@@ -37,6 +37,7 @@ public class Bar extends DisplayElement {
 	 */
 	public void show() {
 		if ((size.width > 0) && (size.height > 0)) {
+			
 			if (dither != null) {
 				dither.setColor(colorPar.getPxlColor());
 				drawDitheredBar(location.x, location.y, size.width, size.height);

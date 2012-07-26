@@ -1064,6 +1064,11 @@ public class PresentationManager implements ExDesignProcessor, TimerBitCodes {
 								actualDuration);
 					}
 				}
+				/*
+				for (double d:tmerr)
+				System.out.print(d+"\t");
+				System.out.println();
+				*/
 				dsp.TimeError.set(tmerr);
 			} // Execute
 		}
@@ -1329,7 +1334,8 @@ public class PresentationManager implements ExDesignProcessor, TimerBitCodes {
 		int r = 0;
 		int timerType = timingElement.getTimerType();
 		long duration = timingElement.getIntendedDuration();
-		System.out.println("Durata originale:"+duration);
+		long duration_original = duration ;
+		
 		boolean useClockTimer = ((timerType & CLOCK_TIMER_BIT) != 0);
 		boolean useResponseTimer = ((timerType & responseTimerMask) != 0);
 		boolean useMediaTimer = ((timerType & mediaTimerMask) != 0);
@@ -1351,6 +1357,7 @@ public class PresentationManager implements ExDesignProcessor, TimerBitCodes {
 		} else {
 			startTime = dsp.showCurrentTimingGroup();
 		}
+		
 		timingElement.setTimeControl(startTime);
 		Debug.timeMsg("Intended duration:            " + duration);
 		if ((timerType & START_RESPONSE_TIMER_BIT) != 0) {
@@ -1394,7 +1401,9 @@ public class PresentationManager implements ExDesignProcessor, TimerBitCodes {
 		if ((timerType == TimerCodes.NO_TIMER) || useFixedDelayTimer) {
 			return;
 		}
-		System.out.println("Durata:"+duration);
+		/*
+		if (duration_original==60000000)
+		System.out.println("Durata:"+duration);*/
 		Debug.timeMsg("Fixed duration:               " + duration);
 		// Debug.time("Effective wait: " + String.valueOf(duration) + " at ");
 		timingMonitor.waitForTimingEvent(timerType, duration, useResponseTimer,
