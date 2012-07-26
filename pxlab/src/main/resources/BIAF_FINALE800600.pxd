@@ -55,14 +55,15 @@ Experiment() {
 				"Per continuare premi la barra spaziatrice."]; 
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				FontFamily="Arial";
-				FontSize= 25;
+				FontSize= 20;
+				LocationY=50;
 			}
 			
 			TextParagraph:cat1() 
 			{
 				Color = yellow();
 				
-				LocationY=-300;
+				LocationY=-200;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				Text = ["%cat_aggettivi_positivi%",
 				"%aggettivi_positivi%"];
@@ -101,13 +102,14 @@ Experiment() {
 				"Premi la barra spaziatrice per incominciare."];
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				FontFamily="Arial";
-				FontSize= 30;           
+				FontSize= 30;  
+				LocationY=100;         
 			}
 			TextParagraph:cat1() 
 			{
 				Color = yellow();
 				
-				LocationY=-300;
+				LocationY=-200;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				Text = ["%cat_aggettivi_positivi%",
 				"%aggettivi_positivi%"];
@@ -133,14 +135,15 @@ Experiment() {
 				"Premi la barra spaziatrice per incominciare."];
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				FontFamily="Arial";
-				FontSize= 25;
+				FontSize= 30;
+				LocationY=180; 
 			}
 			
 				TextParagraph:cat2() 
 			{
 				Color = cyan();
 				
-				LocationY=-300;
+				LocationY=-220;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				Text = ["%cat_cittadini_settentrionali%",
 				"%cittadini_settentrionali%"];
@@ -154,7 +157,7 @@ Experiment() {
 			{
 				Color = yellow();
 				
-				LocationY=-200;
+				LocationY=-130;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				Text = ["%cat_aggettivi_positivi%",
 				"%aggettivi_positivi%"];
@@ -177,13 +180,14 @@ Experiment() {
 				"Premi la barra spaziatrice per incominciare."];
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				FontFamily="Arial";
-				FontSize= 25;
+				FontSize= 30;
+				LocationY=180; 
 			}
 				TextParagraph:cat2() 
 			{
 				Color = cyan();
 				
-				LocationY=-300;
+				LocationY=-220;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				Text = ["%cat_cittadini_meridionali%",
 				"%cittadini_meridionali%"];
@@ -197,7 +201,7 @@ Experiment() {
 			{
 				Color = yellow();
 				
-				LocationY=-200;
+				LocationY=-130;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				Text = ["%cat_aggettivi_positivi%",
 				"%aggettivi_positivi%"];
@@ -213,7 +217,7 @@ Experiment() {
 			TextParagraph:cat1() 
 			{
 				LocationX = 0;
-				LocationY =  -300;
+				LocationY =  -250;
 				Color = yellow();
 				ReferencePoint = de.pxlab.pxl.PositionReferenceCodes.TOP_CENTER;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
@@ -247,7 +251,7 @@ Experiment() {
 					   de.pxlab.pxl.KeyCodes.E_KEY: de.pxlab.pxl.KeyCodes.I_KEY;
 				//Overlay = de.pxlab.pxl.OverlayCodes.TRANSPARENT;
 				FontSize = 72;	
-				LocationY = 280;
+				LocationY = 250;
 			}
 			ClearScreen() 
 			{
@@ -260,7 +264,7 @@ Experiment() {
 			TextParagraphMultiple:A() {
 				Overlay = de.pxlab.pxl.OverlayCodes.DISPLAY_LIST;
 				LocationX = [0,0];
-				LocationY =  [-350,-300];
+				LocationY =  [-250,-200];
 				Color = [53,52];
 				ReferencePoint = de.pxlab.pxl.PositionReferenceCodes.TOP_CENTER;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
@@ -292,7 +296,7 @@ Experiment() {
 				de.pxlab.pxl.KeyCodes.E_KEY: de.pxlab.pxl.KeyCodes.I_KEY;
 				//Overlay = de.pxlab.pxl.OverlayCodes.TRANSPARENT;
 				FontSize = 72;
-				LocationY = 280;
+				LocationY = 250;
 			}
 			ClearScreen() {
 				Timer = de.pxlab.pxl.TimerCodes.CLOCK_TIMER;
@@ -305,8 +309,87 @@ Experiment() {
 		Session() 
 		{
 		
-		Block:B("A"){}// COERENTI NORD 
-			Block(1,"C",["%cat_cittadini_settentrionali%","%cat_aggettivi_positivi%"], "%cat_cittadini_settentrionali%","%cittadini_settentrionali%", "%cat_aggettivi_positivi%","%aggettivi_positivi%",1, 0, 1, 0) 
+		
+		
+		Block:A(){}// SOLO POSITIVI APPRENDIMENTO
+		Block:APP(3, "%cat_aggettivi_positivi%",1, 0)
+            {
+                /* Positivi */
+                Trial:AP("PositiviApp","Felicita'", cat_aggettivi_positiviPosition, ?, ?, ?);
+                Trial:AP("PositiviApp","Gioia", cat_aggettivi_positiviPosition, ?, ?, ?);
+                Trial:AP("PositiviApp","Amicizia", cat_aggettivi_positiviPosition, ?, ?, ?);
+                Trial:AP("PositiviApp","Allegria", cat_aggettivi_positiviPosition, ?, ?, ?);
+                /* Negativi */
+                Trial:AP("PositiviApp","Guerra", cat_aggettivi_negativiPosition, ?, ?, ?);
+                Trial:AP("PositiviApp","Odio", cat_aggettivi_negativiPosition, ?, ?, ?);
+                Trial:AP("PositiviApp","Violenza", cat_aggettivi_negativiPosition, ?, ?, ?);
+                Trial:AP("PositiviApp","Morte", cat_aggettivi_negativiPosition, ?, ?, ?);
+               
+      
+            }
+			
+			Block:B(["A","B"]){}// COERENTI NORD APPRENDIMENTO
+			Block(1,["A","B"],["%cat_cittadini_settentrionali%","%cat_aggettivi_positivi%"],"%cat_cittadini_settentrionali%","%cittadini_settentrionali%", "%cat_aggettivi_positivi%","%aggettivi_positivi%",1, 0, 1, 0) 
+			{
+				/* Meridionali */
+				Trial:T("NordApp","Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
+				Trial:T("NordApp","Palermitani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
+				Trial:T("NordApp","Baresi", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
+				Trial:T("NordApp","Catanzaresi", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
+				/* Settentrionali */
+				Trial:T("NordApp","Milanesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
+				Trial:T("NordApp","Torinesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
+				Trial:T("NordApp","Veneziani", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
+				Trial:T("NordApp","Genovesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
+				/* Positivi */
+				Trial:T("NordApp","Felicita'", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
+				Trial:T("NordApp","Gioia", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
+				Trial:T("NordApp","Amicizia", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
+				Trial:T("NordApp","Allegria", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
+				/* Negativi */
+				Trial:T("NordApp","Guerra", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
+				Trial:T("NordApp","Odio", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
+				Trial:T("NordApp","Violenza", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
+				Trial:T("NordApp","Morte", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
+				
+				
+				Trial:T("NordApp","Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
+				Trial:T("NordApp","Milanesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
+				Trial:T("NordApp","Gioia", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
+				Trial:T("NordApp","Odio", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
+			}
+
+			Block:C(["A","B"]){} // COERENTI SUD APPRENDIMENTO
+			Block(1,["A","B"], ["%cat_cittadini_meridionali%","%cat_aggettivi_positivi%"],"%cat_cittadini_meridionali%","%cittadini_meridionali%","%cat_aggettivi_positivi%","%aggettivi_positivi%", 0, 1, 1, 0)
+			{
+				/* Meridionali */
+				Trial:T("SudApp","Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
+				Trial:T("SudApp","Palermitani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
+				Trial:T("SudApp","Baresi", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
+				Trial:T("SudApp","Catanzaresi", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
+				/* Settentrionali */
+				Trial:T("SudApp","Milanesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
+				Trial:T("SudApp","Torinesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
+				Trial:T("SudApp","Veneziani", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
+				Trial:T("SudApp","Genovesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
+				/* Positivi */
+				Trial:T("SudApp","Felicita'", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
+				Trial:T("SudApp","Gioia", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
+				Trial:T("SudApp","Amicizia", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
+				Trial:T("SudApp","Allegria", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
+				/* Negativi */
+				Trial:T("SudApp","Guerra", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
+				Trial:T("SudApp","Odio", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
+				Trial:T("SudApp","Violenza", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
+				Trial:T("SudApp","Morte", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
+				
+				Trial:T("SudApp","Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
+				Trial:T("SudApp","Milanesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
+				Trial:T("SudApp","Gioia", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
+				Trial:T("SudApp","Odio", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
+			}
+			Block:B("A"){}// COERENTI NORD 
+			Block(1,"A",["%cat_cittadini_settentrionali%","%cat_aggettivi_positivi%"], "%cat_cittadini_settentrionali%","%cittadini_settentrionali%", "%cat_aggettivi_positivi%","%aggettivi_positivi%",1, 0, 1, 0) 
 			{
 				/* Meridionali */
 				Trial:T("NordTest", "Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
@@ -434,84 +517,6 @@ Experiment() {
 			
 		
 	
-		
-		Block:A(){}// SOLO POSITIVI APPRENDIMENTO
-		Block:APP(3, "%cat_aggettivi_positivi%",1, 0)
-            {
-                /* Positivi */
-                Trial:AP("PositiviApp","Felicita'", cat_aggettivi_positiviPosition, ?, ?, ?);
-                Trial:AP("PositiviApp","Gioia", cat_aggettivi_positiviPosition, ?, ?, ?);
-                Trial:AP("PositiviApp","Amicizia", cat_aggettivi_positiviPosition, ?, ?, ?);
-                Trial:AP("PositiviApp","Allegria", cat_aggettivi_positiviPosition, ?, ?, ?);
-                /* Negativi */
-                Trial:AP("PositiviApp","Guerra", cat_aggettivi_negativiPosition, ?, ?, ?);
-                Trial:AP("PositiviApp","Odio", cat_aggettivi_negativiPosition, ?, ?, ?);
-                Trial:AP("PositiviApp","Violenza", cat_aggettivi_negativiPosition, ?, ?, ?);
-                Trial:AP("PositiviApp","Morte", cat_aggettivi_negativiPosition, ?, ?, ?);
-               
-      
-            }
-			
-			Block:B(["A","B"]){}// COERENTI NORD APPRENDIMENTO
-			Block(1,["A","B"],["%cat_cittadini_settentrionali%","%cat_aggettivi_positivi%"],"%cat_cittadini_settentrionali%","%cittadini_settentrionali%", "%cat_aggettivi_positivi%","%aggettivi_positivi%",1, 0, 1, 0) 
-			{
-				/* Meridionali */
-				Trial:T("NordApp","Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
-				Trial:T("NordApp","Palermitani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
-				Trial:T("NordApp","Baresi", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
-				Trial:T("NordApp","Catanzaresi", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
-				/* Settentrionali */
-				Trial:T("NordApp","Milanesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
-				Trial:T("NordApp","Torinesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
-				Trial:T("NordApp","Veneziani", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
-				Trial:T("NordApp","Genovesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
-				/* Positivi */
-				Trial:T("NordApp","Felicita'", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
-				Trial:T("NordApp","Gioia", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
-				Trial:T("NordApp","Amicizia", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
-				Trial:T("NordApp","Allegria", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
-				/* Negativi */
-				Trial:T("NordApp","Guerra", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
-				Trial:T("NordApp","Odio", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
-				Trial:T("NordApp","Violenza", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
-				Trial:T("NordApp","Morte", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
-				
-				
-				Trial:T("NordApp","Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
-				Trial:T("NordApp","Milanesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
-				Trial:T("NordApp","Gioia", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
-				Trial:T("NordApp","Odio", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
-			}
-
-			Block:C(["A","B"]){} // COERENTI SUD APPRENDIMENTO
-			Block(1,["A","B"], ["%cat_cittadini_meridionali%","%cat_aggettivi_positivi%"],"%cat_cittadini_meridionali%","%cittadini_meridionali%","%cat_aggettivi_positivi%","%aggettivi_positivi%", 0, 1, 1, 0)
-			{
-				/* Meridionali */
-				Trial:T("SudApp","Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
-				Trial:T("SudApp","Palermitani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
-				Trial:T("SudApp","Baresi", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
-				Trial:T("SudApp","Catanzaresi", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
-				/* Settentrionali */
-				Trial:T("SudApp","Milanesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
-				Trial:T("SudApp","Torinesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
-				Trial:T("SudApp","Veneziani", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
-				Trial:T("SudApp","Genovesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
-				/* Positivi */
-				Trial:T("SudApp","Felicita'", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
-				Trial:T("SudApp","Gioia", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
-				Trial:T("SudApp","Amicizia", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
-				Trial:T("SudApp","Allegria", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
-				/* Negativi */
-				Trial:T("SudApp","Guerra", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
-				Trial:T("SudApp","Odio", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
-				Trial:T("SudApp","Violenza", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
-				Trial:T("SudApp","Morte", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
-				
-				Trial:T("SudApp","Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
-				Trial:T("SudApp","Milanesi", catcol, cat_cittadini_settentrionaliPosition, ?, ?, ?);
-				Trial:T("SudApp","Gioia", agcol, cat_aggettivi_positiviPosition, ?, ?, ?);
-				Trial:T("SudApp","Odio", agcol, cat_aggettivi_negativiPosition, ?, ?, ?);
-			}
 		}
 	}
 }
