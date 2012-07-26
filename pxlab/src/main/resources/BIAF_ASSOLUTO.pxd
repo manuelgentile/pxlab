@@ -97,7 +97,7 @@ Experiment() {
 			
 		}
 			  
-		Block:A()
+		Block:A(ActiveSubjectGroups)
 		{
 			BlockStartMessage()
 			{
@@ -128,7 +128,7 @@ Experiment() {
 			}
 		}
 				   
-		Block:APP(TrialFactor, categoria1, cat_aggettivi_positiviPosition, cat_aggettivi_negativiPosition) {}
+		Block:APP(ActiveSubjectGroups,TrialFactor, categoria1, cat_aggettivi_positiviPosition, cat_aggettivi_negativiPosition) {}
 		
 		Block:B(ActiveSubjectGroups)
 		{
@@ -271,7 +271,7 @@ Experiment() {
 			TextParagraphMultiple:A() {
 				Overlay = de.pxlab.pxl.OverlayCodes.DISPLAY_LIST;
 				LocationX = [0,0];
-				LocationY =  [-250,-200];
+				LocationY =  [(-250*altezzaAssoluta)/600,-200];
 				Color = [53,52];
 				ReferencePoint = de.pxlab.pxl.PositionReferenceCodes.TOP_CENTER;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
@@ -318,8 +318,8 @@ Experiment() {
 		
 		
 		
-		Block:A(){}// SOLO POSITIVI APPRENDIMENTO
-		Block:APP(3, "%cat_aggettivi_positivi%",1, 0)
+		Block:A(["A","B"]){}// SOLO POSITIVI APPRENDIMENTO
+		Block:APP(["A","B"],3, "%cat_aggettivi_positivi%",1, 0)
             {
                 /* Positivi */
                 Trial:AP("PositiviApp","Felicita'", cat_aggettivi_positiviPosition, ?, ?, ?);
@@ -336,7 +336,7 @@ Experiment() {
             }
 			
 			Block:B(["A","B"]){}// COERENTI NORD APPRENDIMENTO
-			Block( 1,["A","B"],["%cat_cittadini_settentrionali%","%cat_aggettivi_positivi%"],"%cat_cittadini_settentrionali%","%cittadini_settentrionali%", "%cat_aggettivi_positivi%","%aggettivi_positivi%",1, 0, 1, 0) 
+			Block( 1,["C","A","B"],["%cat_cittadini_settentrionali%","%cat_aggettivi_positivi%"],"%cat_cittadini_settentrionali%","%cittadini_settentrionali%", "%cat_aggettivi_positivi%","%aggettivi_positivi%",1, 0, 1, 0) 
 			{
 				/* Meridionali */
 				Trial:T("NordApp","Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
