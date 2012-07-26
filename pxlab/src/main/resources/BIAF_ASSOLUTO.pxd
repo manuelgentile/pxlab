@@ -37,6 +37,12 @@ Experiment() {
 			new testo1 = 0;
 			new blocco = 0;
 			SkipBoundingBlockDisplays = 0;
+			new altezzaPercentuale=screenHeight()/100;
+			new altezzaAssoluta=screenHeight();
+		
+			new pos1=(-250*altezzaAssoluta)/600;
+			new pos2=(-200*altezzaAssoluta)/600;
+			
 			DataFileTrialFormat = "%SubjectCode%	%SubjectGroup%	%item%	%blocco%	%Trial:T.Feedback.CorrectCode%	%Trial:T.Feedback.Response%	%Trial:T.Feedback.ResponseTime%	%Trial:T.Message.ResponseTime%";
 			
 		}
@@ -55,21 +61,22 @@ Experiment() {
 				"Per continuare premi la barra spaziatrice."]; 
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				FontFamily="Arial";
-				FontSize= 20;
-				LocationY=50;
+				FontSize= (20*altezzaAssoluta)/600;
+				LocationY=(50*altezzaAssoluta)/600;
 			}
 			
 			TextParagraph:cat1() 
 			{
 				Color = yellow();
 				
-				LocationY=-200;
+				LocationY=(-200*altezzaAssoluta)/600; //-altezzaPercentuale*35;
+				
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				Text = ["%cat_aggettivi_positivi%",
 				"%aggettivi_positivi%"];
 				Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
 				FontFamily="Arial";
-				FontSize= 30;
+				FontSize= (30*altezzaAssoluta)/600;
 				ResponseSet = de.pxlab.pxl.KeyCodes.SPACE_KEY;
 			}
 		}
@@ -102,20 +109,20 @@ Experiment() {
 				"Premi la barra spaziatrice per incominciare."];
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				FontFamily="Arial";
-				FontSize= 30;  
-				LocationY=100;         
+				FontSize= (30*altezzaAssoluta)/600;
+				LocationY=(100*altezzaAssoluta)/600;      
 			}
 			TextParagraph:cat1() 
 			{
 				Color = yellow();
 				
-				LocationY=-200;
+				LocationY=(-200*altezzaAssoluta)/600;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				Text = ["%cat_aggettivi_positivi%",
 				"%aggettivi_positivi%"];
 				Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
 				FontFamily="Arial";
-				FontSize= 30;
+				FontSize= (30*altezzaAssoluta)/600;
 				ResponseSet = de.pxlab.pxl.KeyCodes.SPACE_KEY;
 				
 			}
@@ -135,21 +142,21 @@ Experiment() {
 				"Premi la barra spaziatrice per incominciare."];
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				FontFamily="Arial";
-				FontSize= 30;
-				LocationY=180; 
+				FontSize= (30*altezzaAssoluta)/600;
+				LocationY=(180*altezzaAssoluta)/600; 
 			}
 			
 				TextParagraph:cat2() 
 			{
 				Color = cyan();
 				
-				LocationY=-220;
+				LocationY=(-220*altezzaAssoluta)/600;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				Text = ["%cat_cittadini_settentrionali%",
 				"%cittadini_settentrionali%"];
 				Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
 				FontFamily="Arial";
-				FontSize= 30;
+				FontSize= (30*altezzaAssoluta)/600;
 				ResponseSet = de.pxlab.pxl.KeyCodes.SPACE_KEY;
 			}
 			
@@ -157,13 +164,13 @@ Experiment() {
 			{
 				Color = yellow();
 				
-				LocationY=-130;
+				LocationY=(-130*altezzaAssoluta)/600;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				Text = ["%cat_aggettivi_positivi%",
 				"%aggettivi_positivi%"];
 				Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
 				FontFamily="Arial";
-				FontSize= 30;
+				FontSize= (30*altezzaAssoluta)/600;
 				ResponseSet = de.pxlab.pxl.KeyCodes.SPACE_KEY;
 			}
 			
@@ -180,20 +187,20 @@ Experiment() {
 				"Premi la barra spaziatrice per incominciare."];
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				FontFamily="Arial";
-				FontSize= 30;
-				LocationY=180; 
+				FontSize= (30*altezzaAssoluta)/600;
+				LocationY=(180*altezzaAssoluta)/600; 
 			}
 				TextParagraph:cat2() 
 			{
 				Color = cyan();
 				
-				LocationY=-220;
+				LocationY=(-220*altezzaAssoluta)/600;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				Text = ["%cat_cittadini_meridionali%",
 				"%cittadini_meridionali%"];
 				Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
 				FontFamily="Arial";
-				FontSize= 30;
+				FontSize= (30*altezzaAssoluta)/600;
 				ResponseSet = de.pxlab.pxl.KeyCodes.SPACE_KEY;
 			}
 			
@@ -201,13 +208,13 @@ Experiment() {
 			{
 				Color = yellow();
 				
-				LocationY=-130;
+				LocationY=(-130*altezzaAssoluta)/600;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				Text = ["%cat_aggettivi_positivi%",
 				"%aggettivi_positivi%"];
 				Overlay = de.pxlab.pxl.OverlayCodes.JOIN;
 				FontFamily="Arial";
-				FontSize= 30;
+				FontSize= (30*altezzaAssoluta)/600;
 				ResponseSet = de.pxlab.pxl.KeyCodes.SPACE_KEY;
 			}
 		}
@@ -217,14 +224,14 @@ Experiment() {
 			TextParagraph:cat1() 
 			{
 				LocationX = 0;
-				LocationY =  -250;
+				LocationY =  (-250*altezzaAssoluta)/600;
 				Color = yellow();
 				ReferencePoint = de.pxlab.pxl.PositionReferenceCodes.TOP_CENTER;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
 				Text = categoria1;
 				Timer = de.pxlab.pxl.TimerCodes.NO_TIMER;
 				FontFamily="Arial";
-				FontSize= 30;
+				FontSize= (30*altezzaAssoluta)/600;
 				Overlay = de.pxlab.pxl.OverlayCodes.DISPLAY_LIST;
 			}
 			
@@ -238,7 +245,7 @@ Experiment() {
 				Timer = de.pxlab.pxl.TimerCodes.RESPONSE_TIMER;
 				ResponseSet = [de.pxlab.pxl.KeyCodes.E_KEY, de.pxlab.pxl.KeyCodes.I_KEY];
 						FontFamily="Arial";
-						FontSize= 70;
+						FontSize= (70*altezzaAssoluta)/600;
 			}
 			Feedback() 
 			{
@@ -250,8 +257,8 @@ Experiment() {
 				ResponseSet = (Trial:AP.Feedback.CorrectCode == 0)?
 					   de.pxlab.pxl.KeyCodes.E_KEY: de.pxlab.pxl.KeyCodes.I_KEY;
 				//Overlay = de.pxlab.pxl.OverlayCodes.TRANSPARENT;
-				FontSize = 72;	
-				LocationY = 250;
+				FontSize = (72*altezzaAssoluta)/600;	
+				LocationY = (250*altezzaAssoluta)/600;
 			}
 			ClearScreen() 
 			{
@@ -272,7 +279,7 @@ Experiment() {
 				Timer = de.pxlab.pxl.TimerCodes.NO_TIMER;
 				
 				FontFamily="Arial";
-				FontSize= 35;
+				FontSize= (35*altezzaAssoluta)/600;
 			}
 		
 			
@@ -284,7 +291,7 @@ Experiment() {
 				Timer = de.pxlab.pxl.TimerCodes.RESPONSE_TIMER;
 				ResponseSet = [de.pxlab.pxl.KeyCodes.E_KEY, de.pxlab.pxl.KeyCodes.I_KEY];
 				FontFamily="Arial";
-				FontSize= 70;
+				FontSize= (70*altezzaAssoluta)/600;
 			}
 			Feedback() {
 				ResponseParameter = Trial:T.Message.ResponseCode;
@@ -295,8 +302,8 @@ Experiment() {
 				ResponseSet = (Trial:T.Feedback.CorrectCode == 0)?
 				de.pxlab.pxl.KeyCodes.E_KEY: de.pxlab.pxl.KeyCodes.I_KEY;
 				//Overlay = de.pxlab.pxl.OverlayCodes.TRANSPARENT;
-				FontSize = 72;
-				LocationY = 250;
+				FontSize = (72*altezzaAssoluta)/600;
+				LocationY = (250*altezzaAssoluta)/600;
 			}
 			ClearScreen() {
 				Timer = de.pxlab.pxl.TimerCodes.CLOCK_TIMER;
@@ -329,7 +336,7 @@ Experiment() {
             }
 			
 			Block:B(["A","B"]){}// COERENTI NORD APPRENDIMENTO
-			Block(1,["A","B"],["%cat_cittadini_settentrionali%","%cat_aggettivi_positivi%"],"%cat_cittadini_settentrionali%","%cittadini_settentrionali%", "%cat_aggettivi_positivi%","%aggettivi_positivi%",1, 0, 1, 0) 
+			Block( 1,["A","B"],["%cat_cittadini_settentrionali%","%cat_aggettivi_positivi%"],"%cat_cittadini_settentrionali%","%cittadini_settentrionali%", "%cat_aggettivi_positivi%","%aggettivi_positivi%",1, 0, 1, 0) 
 			{
 				/* Meridionali */
 				Trial:T("NordApp","Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
