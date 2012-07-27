@@ -43,6 +43,7 @@ Experiment() {
 			new pos1=(-250*altezzaAssoluta)/600;
 			new pos2=(-200*altezzaAssoluta)/600;
 			
+			
 			DataFileTrialFormat = "%SubjectCode%	%SubjectGroup%	%item%	%blocco%	%Trial:T.Feedback.CorrectCode%	%Trial:T.Feedback.Response%	%Trial:T.Feedback.ResponseTime%	%Trial:T.Message.ResponseTime%";
 			
 		}
