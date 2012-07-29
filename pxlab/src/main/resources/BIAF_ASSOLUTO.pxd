@@ -272,7 +272,7 @@ Experiment() {
 			TextParagraphMultiple:A() {
 				Overlay = de.pxlab.pxl.OverlayCodes.DISPLAY_LIST;
 				LocationX = [0,0];
-				LocationY =  [pos1,pos2];
+				LocationY =  [-200*altezzaAssoluta/600,-200];
 				Color = [53,52];
 				ReferencePoint = de.pxlab.pxl.PositionReferenceCodes.TOP_CENTER;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
