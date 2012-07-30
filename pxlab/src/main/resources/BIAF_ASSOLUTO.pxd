@@ -259,7 +259,7 @@ Experiment() {
 				Timer = de.pxlab.pxl.TimerCodes.RESPONSE_TIMER;
 				ResponseSet = (Trial:AP.Feedback.CorrectCode == 0)?
 					   de.pxlab.pxl.KeyCodes.E_KEY: de.pxlab.pxl.KeyCodes.I_KEY;
-				//Overlay = de.pxlab.pxl.OverlayCodes.TRANSPARENT;
+				Overlay = de.pxlab.pxl.OverlayCodes.TRANSPARENT;
 				FontSize = (72*altezzaAssoluta)/600;	
 				LocationY = (250*altezzaAssoluta)/600;
 			}
@@ -304,7 +304,7 @@ Experiment() {
 				Timer = de.pxlab.pxl.TimerCodes.RESPONSE_TIMER;
 				ResponseSet = (Trial:T.Feedback.CorrectCode == 0)?
 				de.pxlab.pxl.KeyCodes.E_KEY: de.pxlab.pxl.KeyCodes.I_KEY;
-				//Overlay = de.pxlab.pxl.OverlayCodes.TRANSPARENT;
+				Overlay = de.pxlab.pxl.OverlayCodes.TRANSPARENT;
 				FontSize = (72*altezzaAssoluta)/600;
 				LocationY = (250*altezzaAssoluta)/600;
 			}
@@ -339,7 +339,7 @@ Experiment() {
             }
 			
 			Block:B(["A","B"]){}// COERENTI NORD APPRENDIMENTO
-			Block( 1,["C","A","B"],["%cat_cittadini_settentrionali%","%cat_aggettivi_positivi%"],"%cat_cittadini_settentrionali%","%cittadini_settentrionali%", "%cat_aggettivi_positivi%","%aggettivi_positivi%",1, 0, 1, 0) 
+			Block( 1,["A","B"],["%cat_cittadini_settentrionali%","%cat_aggettivi_positivi%"],"%cat_cittadini_settentrionali%","%cittadini_settentrionali%", "%cat_aggettivi_positivi%","%aggettivi_positivi%",1, 0, 1, 0) 
 			{
 				/* Meridionali */
 				Trial:T("NordApp","Napoletani", catcol, cat_cittadini_meridionaliPosition, ?, ?, ?);
