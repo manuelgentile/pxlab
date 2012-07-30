@@ -1,5 +1,7 @@
 package de.pxlab.pxl;
 
+import java.util.concurrent.locks.LockSupport;
+
 /**
  * A lock object which may be used to put the current thread to sleep for a
  * given time and wake it up again. This class tries to get the millisecond
@@ -43,20 +45,39 @@ public class WaitLock {
 			long t = HiresClock.getTimeNanos() + nanoDuration;
 			long t0 = t - sleepBound;
 			long t1 = t - yieldBound;
+			
+			//System.out.println(t+"\t"+t0+"\t"+t1);
+			
 			waiting = true;
 			if (rm == null) {
 				// no input device polling is required
+				int i=0;
+				
+				
+				
+				
 				while (waiting && (HiresClock.getTimeNanos() < t0)) {
+					
+					//System.out.println(i++);
+					
 					try {
 						Thread.sleep(1);
 					} catch (InterruptedException iex) {
 					}
 				}
+				//System.out.println("stop\t"+i++);
 				while (waiting && (HiresClock.getTimeNanos() < t1)) {
 					Thread.yield();
+					//System.out.println(i++);
 				}
+				//System.out.println("stop2\t"+i++);
 				while (waiting && (HiresClock.getTimeNanos() < t)) {
+					//System.out.println(i++);
 				}
+				//System.out.println("stop3\t"+i++);
+				
+				
+				//LockSupport.parkNanos(nanoDuration);
 			} else {
 				// we have to poll an input device
 				while (waiting && (HiresClock.getTimeNanos() < t0)) {

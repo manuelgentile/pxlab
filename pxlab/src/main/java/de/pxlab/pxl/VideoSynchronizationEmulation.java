@@ -11,7 +11,9 @@ package de.pxlab.pxl;
  */
 public class VideoSynchronizationEmulation implements VideoSynchronization {
 	private WaitLock waitLock;
-	private static final long cyclePeriod = 13333333L;
+	//private static final long cyclePeriod = 13333333L;
+	
+	private static final long cyclePeriod = 2500000L;
 
 	protected VideoSynchronizationEmulation() {
 		waitLock = new WaitLock();

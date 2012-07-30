@@ -89,6 +89,7 @@ public class HiresClock {
 		long t1, t2;
 		t1 = getTimeNanos();
 		long t = timer.getTimeNanos() + ns;
+		System.out.println("ciao");
 		int dms = (int) (ns / 1000000L) - sleepTimerGranularity;
 		// first sleep as long as possible
 		if (dms > 0) {
