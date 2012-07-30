@@ -13,7 +13,7 @@ public class VideoSynchronizationEmulation implements VideoSynchronization {
 	private WaitLock waitLock;
 	//private static final long cyclePeriod = 13333333L;
 	
-	private static final long cyclePeriod = 2500000L;
+	private static final long cyclePeriod = 5000000L;
 
 	protected VideoSynchronizationEmulation() {
 		waitLock = new WaitLock();

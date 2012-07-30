@@ -214,7 +214,9 @@ public class Debug {
 	 */
 	public static void add(String p) {
 		DebugOptionCodeMap ocm = new DebugOptionCodeMap();
+		System.out.println("Stringa:"+p);
 		if (ocm.hasCodeFor(p)) {
+			System.out.println("qui");
 			add((long) (ocm.getCode()));
 		}
 		System.out.println("Debug.add(): " + p + " mask = " + mask);

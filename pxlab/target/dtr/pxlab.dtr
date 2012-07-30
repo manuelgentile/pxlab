@@ -1,0 +1,99 @@
+Experiment()
+{
+  Context()
+  {
+    AssignmentGroup()
+    {
+      TrialFactor = 10;
+      SubjectCode = "pxlab";
+      new st = de.pxlab.pxl.TimerCodes.VS_CLOCK_TIMER;
+      new dt = 4;
+    }
+    Session()
+    {
+      TextParagraph()
+      {
+        Text = ["Unsynchronized Video Frame Duration Test", " ", "Use parameter \'dt\' to set an intended duration.", "Actual duration should be less than a single video frame duration.", "Use options \'-S4 -Rnnn -wnnn -hnnn \' to set video system resolution and refresh rate.", "Use option \'-D time\' to get detailed timing information.", "Timing data are stored in \'pxlab.dat\'.", " ", "Press any key to start."];
+        FontSize = 24;
+      }
+      ClearScreen()
+      {
+        Timer = de.pxlab.pxl.TimerCodes.NO_TIMER;
+      }
+    }
+    Trial( SimpleBar.Duration, SimpleBar.TimeControl, ClearScreen:Post.TimeControl, SimpleBar.ResponseTime, SimpleBar.TimeError)
+    {
+      ClearScreen:Pre()
+      {
+        Timer = de.pxlab.pxl.TimerCodes.CLOCK_TIMER;
+        Duration = 200;
+      }
+      SimpleBar()
+      {
+        Timer = st;
+        Duration = dt;
+        Height = screenHeight();
+        Width = 400;
+        Color = White;
+      }
+      ClearScreen:Post()
+      {
+        Timer = de.pxlab.pxl.TimerCodes.CLOCK_TIMER;
+        Duration = 1;
+      }
+    }
+    // Command line assignments
+
+    AssignmentGroup();
+    // Command line assignments
+
+    AssignmentGroup();
+    // Session dependent assignments
+
+    AssignmentGroup()
+    {
+      SubjectCode = "pxlab";
+      RemainingSessionGroup = 0;
+      RemainingSessionRuns = 0;
+      Date = "26/07/12 11.15.42 CEST";
+      PXLabVersion = "2.1.19";
+      PrimaryScreen.ColorDevice = de.pxlab.pxl.ColorDeviceTransformCodes.SONY_TRINITRON;
+      PrimaryScreen.ColorDeviceDACRange = 255;
+      PrimaryScreen.RedPrimary = [21.26, 0.621, 0.34];
+      PrimaryScreen.GreenPrimary = [71.52, 0.281, 0.606];
+      PrimaryScreen.BluePrimary = [7.22, 0.152, 0.067];
+      PrimaryScreen.RedGamma = [2.4, 1];
+      PrimaryScreen.GreenGamma = [2.4, 1];
+      PrimaryScreen.BlueGamma = [2.4, 1];
+      SecondaryScreen.ColorDevice = de.pxlab.pxl.ColorDeviceTransformCodes.SONY_TRINITRON;
+      SecondaryScreen.ColorDeviceDACRange = 255;
+      SecondaryScreen.RedPrimary = [21.26, 0.621, 0.34];
+      SecondaryScreen.GreenPrimary = [71.52, 0.281, 0.606];
+      SecondaryScreen.BluePrimary = [7.22, 0.152, 0.067];
+      SecondaryScreen.RedGamma = [2.4, 1];
+      SecondaryScreen.GreenGamma = [2.4, 1];
+      SecondaryScreen.BlueGamma = [2.4, 1];
+      DeviceWhitePoint = [100, 0.3065, 0.3468];
+      CIEWhitePoint = 0;
+    }
+  }
+  Procedure()
+  {
+    Session()
+    {
+      Block()
+      {
+        Trial( dt, 97105535.0708, 97105539.1923, 4.1215, 0.1215);
+        Trial( dt, 97105775.033, 97105779.128, 4.095, 0.095);
+        Trial( dt, 97106010.0297, 97106014.1527, 4.123, 0.123);
+        Trial( dt, 97106250.027, 97106254.1578, 4.1308, 0.1308);
+        Trial( dt, 97106485.0294, 97106489.1553, 4.1259, 0.1259);
+        Trial( dt, 97106720.0327, 97106724.1353, 4.1027, 0.1027);
+        Trial( dt, 97106955.0316, 97106959.1491, 4.1175, 0.1175);
+        Trial( dt, 97107190.029, 97107194.1585, 4.1295, 0.1295);
+        Trial( dt, 97107425.0326, 97107429.1625, 4.1299, 0.1299);
+        Trial( dt, 97107660.0365, 97107664.1505, 4.114, 0.114);
+      }
+    }
+  }
+}

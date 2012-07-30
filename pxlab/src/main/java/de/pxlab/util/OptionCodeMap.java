@@ -44,6 +44,9 @@ public class OptionCodeMap extends HashMap {
 	public boolean hasCodeFor(String shorthand) {
 		// System.out.println("OptionCodeMap.hasCodeFor(): Looking for " +
 		// shorthand);
+		
+		System.out.println(shorthand);
+		
 		if (shorthand.startsWith("?")) {
 			System.out.println(toString());
 			return false;

@@ -16,8 +16,8 @@ import java.util.concurrent.locks.LockSupport;
  */
 public class WaitLock {
 	private boolean waiting;
-	private static final long sleepBound = 20 * 1000000L;
-	private static final long yieldBound = 2 * 1000000L;
+	private static  long sleepBound = 20 * 1000000L;
+	private static  long yieldBound = 2 * 1000000L;
 
 	/**
 	 * Causes the current thread to wait until it is told to wake up or the
@@ -43,6 +43,14 @@ public class WaitLock {
 	public void waitForNanos(long nanoDuration, ResponseManager rm) {
 		if (nanoDuration > 0) {
 			long t = HiresClock.getTimeNanos() + nanoDuration;
+			
+			
+			sleepBound = Math.round(nanoDuration*0.7);
+			if (sleepBound<1 * 1000000L)
+				sleepBound=0;
+			yieldBound = Math.round(nanoDuration*0.2);
+			if (yieldBound<1 * 1000000L)
+				yieldBound=0;
 			long t0 = t - sleepBound;
 			long t1 = t - yieldBound;
 			

@@ -1,0 +1,33 @@
+#surefire
+#Wed Jul 25 15:38:22 CEST 2012
+testClassesDirectory=/home/gentile/git/github/pxlab/target/test-classes
+classPathUrl.4=/home/gentile/.m2/repository/batik/batik-bridge/1.6/batik-bridge-1.6.jar
+classPathUrl.3=/home/gentile/.m2/repository/javax/comm/comm/2.0.3/comm-2.0.3.jar
+classPathUrl.2=/home/gentile/.m2/repository/javax/media/jmf/2.1.1e/jmf-2.1.1e.jar
+useManifestOnlyJar=true
+classPathUrl.1=/home/gentile/git/github/pxlab/target/classes
+reportsDirectory=/home/gentile/git/github/pxlab/target/surefire-reports
+classPathUrl.0=/home/gentile/git/github/pxlab/target/test-classes
+dirscanner.0=directoryScannerOptions
+providerConfiguration=org.apache.maven.surefire.junit.JUnit3Provider
+testSuiteDefinitionTestSourceDirectory=/home/gentile/git/github/pxlab/src/test/java
+surefireClassPathUrl.1=/home/gentile/.m2/repository/org/apache/maven/surefire/surefire-api/2.7.1/surefire-api-2.7.1.jar
+surefireClassPathUrl.0=/home/gentile/.m2/repository/org/apache/maven/surefire/surefire-junit3/2.7.1/surefire-junit3-2.7.1.jar
+report.2=org.apache.maven.surefire.report.XMLReporter
+useSystemClassLoader=true
+report.1=org.apache.maven.surefire.report.BriefFileReporter
+report.0=org.apache.maven.surefire.report.ForkingConsoleReporter
+excludes0=**/*$*
+isTrimStackTrace=true
+dirscanner.0.params=/home/gentile/git/github/pxlab/target/test-classes|[**/Test*.java, **/*Test.java, **/*TestCase.java]|[**/*$*]
+includes2=**/*TestCase.java
+enableAssertions=true
+includes1=**/*Test.java
+failIfNoTests=false
+includes0=**/Test*.java
+dirscanner.0.types=java.io.File|java.util.ArrayList|java.util.ArrayList
+classPathUrl.8=/home/gentile/.m2/repository/batik/batik-awt-util/1.6/batik-awt-util-1.6.jar
+classPathUrl.7=/home/gentile/.m2/repository/batik/batik-ext/1.6/batik-ext-1.6.jar
+childDelegation=false
+classPathUrl.6=/home/gentile/.m2/repository/batik/batik-util/1.6/batik-util-1.6.jar
+classPathUrl.5=/home/gentile/.m2/repository/batik/batik-gvt/1.6/batik-gvt-1.6.jar
