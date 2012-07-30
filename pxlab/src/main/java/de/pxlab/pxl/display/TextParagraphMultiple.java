@@ -20,6 +20,8 @@ public class TextParagraphMultiple extends TextParagraph {
 		Width.set(150);
 		Wrapping.set(1);
 		LocationX.getValue().set(new ExParValue(-20, 20));
+		
+		
 		ExParValue[] a = new ExParValue[2];
 		a[0] = new ExParValueConstant(
 				"de.pxlab.pxl.PositionReferenceCodes.TOP_RIGHT");
@@ -57,9 +59,10 @@ public class TextParagraphMultiple extends TextParagraph {
 		}
 		double w = Width.getDouble();
 		int ww = (w < 1.0) ? (int) (width * w) : (int) w;
-		
+		//System.out.println(Integer.parseInt(LocationY.getString()));
 		int[] x = LocationX.getIntArray();
 		int[] y = LocationY.getIntArray();
+		
 		int[] r = ReferencePoint.getIntArray();
 		int[] a = Alignment.getIntArray();
 		for (int i = 0; i < n; i++) {

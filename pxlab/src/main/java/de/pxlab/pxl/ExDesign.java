@@ -367,17 +367,22 @@ public class ExDesign implements Cloneable {
 	 */
 	private ExDesignNode loadExDesignTree(InputStream ins, String fn)
 			throws IOException {
-		// Debug.add(Debug.PARSER);
+		Debug.add(Debug.PARSER);
+		 //Debug.add(Debug.PARSER);
 		// System.out.println("ExDesign.loadExDesignTree() from " + fn);
+		
 		ExDesignNode dt = null;
 		ExDesignTreeParser pp = new ExDesignTreeParser(ins, Base.getEncoding());
-		// Debug.show(Debug.PARSER, this, "Parser created.");
+		
+		
+		 //Debug.show(Debug.PARSER, this, "Parser created.");
 		Debug.show(Debug.FILES,
 				"ExDesign.loadExDesignTree(): Read design file " + fn);
 		Debug.show(Debug.PARSER, this, "Parse file " + fn + " ...");
 		// May throw a ParseException
 		try {
 			dt = pp.experimentDeclaration();
+			
 		} catch (ParseException pex) {
 			new SyntaxError(StringExt.fixedParserErrorMessage(pex, fn));
 			throw new IOException("Syntax error in file " + fn);

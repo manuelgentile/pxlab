@@ -536,6 +536,7 @@ public class ExPar implements ExParTypeCodes {
 
 	/** Return a parameter's integer array. */
 	public int[] getIntArray() {
+		
 		return (value.getIntArray());
 	}
 
