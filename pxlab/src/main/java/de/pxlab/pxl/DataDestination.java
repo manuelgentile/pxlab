@@ -136,13 +136,15 @@ public class DataDestination {
 			// System.out.println("ExRun.createDataWriter(): Applet");
 			// We are an applet
 			try {
-				URL destURL = new URL(ExPar.DataFileDestination.getString());
+				String s=ExPar.DataFileDestination.getString();
+				URL destURL = new URL(s);
 				// We have a valid URL
 				trialDataWriter = new URLDataWriter(destURL,
 						appletDataFileName());
-				// System.out.println("DataWriter.create(): Write data to URL "
-				// + destURL);
+				 System.out.println("DataWriter.create(): Write data to URL "
+				 + destURL);
 			} catch (MalformedURLException mfe) {
+				System.out.println("QUI7");
 				// We do not have a valid URL
 				trialDataWriter = new BrowserWindowDataWriter(
 						appletDataFileName());

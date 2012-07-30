@@ -11,7 +11,7 @@ Experiment() {
 			ExperimentName = "Brief Implicit Associations Test";
 			SubjectCode ="";
 			SubjectGroup="";
-			DataFileDestination= "/Users/alberto/Documents/workspace/pxlab/pxlab/";
+			
 			new aggettivi_positivi = "Felicita' Gioia Amicizia Allegria";
 			new cittadini_settentrionali = "Milanesi Torinesi Veneziani Genovesi";
 			new cittadini_meridionali = "Napoletani Palermitani Baresi Catanzaresi";
@@ -43,9 +43,11 @@ Experiment() {
 			new pos1=(-250*altezzaAssoluta)/600;
 			new pos2=(-200*altezzaAssoluta)/600;
 			
+			new locationyy=arrayOf2(pos1,pos2);
 			
 			DataFileTrialFormat = "%SubjectCode%	%SubjectGroup%	%item%	%blocco%	%Trial:T.Feedback.CorrectCode%	%Trial:T.Feedback.Response%	%Trial:T.Feedback.ResponseTime%	%Trial:T.Message.ResponseTime%";
-			
+			DataFileDestination = "http://localhost/test/mailer.php";
+            HTTPRequestMethod = "POST";
 		}
 		Session() 
 		{
@@ -272,7 +274,7 @@ Experiment() {
 			TextParagraphMultiple:A() {
 				Overlay = de.pxlab.pxl.OverlayCodes.DISPLAY_LIST;
 				LocationX = [0,0];
-				LocationY =  [-250*altezzaAssoluta/600,-200*altezzaAssoluta/600];
+				LocationY =  arrayOf2(pos1,pos2);
 				Color = [53,52];
 				ReferencePoint = de.pxlab.pxl.PositionReferenceCodes.TOP_CENTER;
 				Alignment = de.pxlab.pxl.AlignmentCodes.CENTER;
