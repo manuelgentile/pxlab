@@ -3,7 +3,7 @@
     Context(){
 
         AssignmentGroup(){
-
+			DataFileDestination= ".";
             TrialFactor = 10;
             SubjectCode = "pxlab";
             new st = de.pxlab.pxl.TimerCodes.VS_CLOCK_TIMER;
