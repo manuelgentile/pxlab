@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.applet.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.StringTokenizer;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -158,6 +160,13 @@ public class ExRunButton extends Applet implements ActionListener,
 				: "Experiment finished.");
 		exRunCommand = null;
 		Base.setApplet(null);
+		try {
+			getAppletContext().showDocument(
+					new URL("javascript:experimentFinished()"));
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// setConcurrentAppletStates(true);
 	}
 

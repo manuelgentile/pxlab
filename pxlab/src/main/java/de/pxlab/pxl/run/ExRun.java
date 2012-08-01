@@ -187,7 +187,7 @@ public class ExRun implements ExDesignThreadStarter {
 				ExDesignDataProcessor dataProcessor = new DataProcessor(
 						controlFrame, exDesign);
 				exDesign.runExperiment(this, presentationManager, dataProcessor);
-				controlFrame.requestFocus();
+				
 			}
 		} else {
 			// The user has refused to give us a valid design file name
